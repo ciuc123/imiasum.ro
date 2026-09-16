@@ -1,0 +1,1 @@
+import rss from '@astrojs/rss'; import {posts} from '../data/posts.js'; export function GET(context){return rss({title:'Educație Relațională',description:'Educație Relațională',site:context.site||'https://imiasum.ro',items:posts.slice(0,50).map(p=>({title:p.title,pubDate:new Date(p.date),link:`/${p.slug}/`,description:p.excerpt||''}))});}
