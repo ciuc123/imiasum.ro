@@ -1,0 +1,72 @@
+[
+  {
+    "id": 6,
+    "name": "Asuma-ti puterea interioara",
+    "slug": "asuma-ti-puterea-interioara",
+    "description": "",
+    "parent": 0
+  },
+  {
+    "id": 9,
+    "name": "Darurile vietii",
+    "slug": "darurile-vietii",
+    "description": "",
+    "parent": 0
+  },
+  {
+    "id": 24,
+    "name": "Gândul serii",
+    "slug": "gandul-serii",
+    "description": "",
+    "parent": 0
+  },
+  {
+    "id": 19,
+    "name": "Iubire",
+    "slug": "iubire",
+    "description": "",
+    "parent": 0
+  },
+  {
+    "id": 1,
+    "name": "Motivare",
+    "slug": "motivare",
+    "description": "",
+    "parent": 0
+  },
+  {
+    "id": 22,
+    "name": "Necesare",
+    "slug": "necesare",
+    "description": "",
+    "parent": 0
+  },
+  {
+    "id": 20,
+    "name": "Povești cu suflet",
+    "slug": "povesti-cu-suflet",
+    "description": "",
+    "parent": 0
+  },
+  {
+    "id": 23,
+    "name": "Recomandări",
+    "slug": "recomandari",
+    "description": "",
+    "parent": 0
+  },
+  {
+    "id": 4,
+    "name": "Relatii armonioase",
+    "slug": "relatii-armonioase",
+    "description": "",
+    "parent": 0
+  },
+  {
+    "id": 18,
+    "name": "Scurtime",
+    "slug": "scurtime",
+    "description": "",
+    "parent": 0
+  }
+]
