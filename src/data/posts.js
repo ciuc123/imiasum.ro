@@ -8,7 +8,7 @@ import y2022 from './2022.json';
 import y2023 from './2023.json';
 import y2024 from './2024.json';
 
-export const posts = [
+const importedPosts = [
   ...y2016,
   ...y2017,
   ...y2018,
@@ -19,3 +19,7 @@ export const posts = [
   ...y2023,
   ...y2024,
 ].sort((a, b) => new Date(b.date) - new Date(a.date));
+
+const removedPostIds = new Set([4601]);
+
+export const posts = importedPosts.filter((post) => !removedPostIds.has(post.id));

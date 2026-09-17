@@ -1,4 +1,6 @@
 ---
+import categories from '../data/categories.json';
+
 const {
     title = 'Educație Relațională',
     description = 'Educație Relațională'
@@ -16,12 +18,16 @@ const {
 </head>
 
 <body>
-<header>
+<header class="site-header">
     <a class="site-title" href="/">Educație Relațională</a>
-    <nav>
-        <a href="/blog/">Blog</a>
-        <a href="/#categorii">Categorii</a>
-    </nav>
+    <div class="site-navigation">
+        <nav class="primary-nav" aria-label="Navigare principală">
+            <a href="/blog/">Blog</a>
+        </nav>
+        <nav class="category-nav" aria-label="Categorii">
+            {categories.map((category) => <a href={`/category/${category.slug}/`}>{category.name}</a>)}
+        </nav>
+    </div>
 </header>
 
 <main>
