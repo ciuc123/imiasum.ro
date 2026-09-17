@@ -1,0 +1,4 @@
+---
+import Layout from '../../layouts/Layout.astro'; import {posts} from '../../data/posts.js';
+---
+<Layout title="Blog"><h1>Blog</h1>{posts.map(p=><article><h2><a href={`/${p.slug}/`}>{p.title}</a></h2><div class="post-meta">{p.date}</div></article>)}</Layout>
