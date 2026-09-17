@@ -1,0 +1,16 @@
+---
+const { posts, showExcerpt = false } = Astro.props;
+---
+
+<div class="post-list">
+  {posts.map((post) => (
+    <article class="post-card">
+      <p class="post-meta"><time datetime={post.date}>{post.date}</time></p>
+      <h2><a href={`/${post.slug}/`}>{post.title}</a></h2>
+      {showExcerpt && post.excerpt && <p class="post-excerpt">{post.excerpt}</p>}
+      {post.categories?.length > 0 && <div class="post-categories" aria-label="Categorii">
+        {post.categories.map((category) => <a href={`/category/${category.slug}/`}>{category.name}</a>)}
+      </div>}
+    </article>
+  ))}
+</div>

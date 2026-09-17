@@ -13,8 +13,12 @@ const { item } = Astro.props;
 ---
 <Layout title={item.title}>
   <article>
+    <p class="eyebrow">Articol</p>
     <h1>{item.title}</h1>
-    {item.date && <div class="post-meta">{item.date}</div>}
+    {item.date && <p class="post-meta"><time datetime={item.date}>{item.date}</time></p>}
+    {item.categories?.length > 0 && <div class="post-categories post-categories-detail" aria-label="Categorii">
+      {item.categories.map((category) => <a href={`/category/${category.slug}/`}>{category.name}</a>)}
+    </div>}
     <div class="post-content" set:html={item.content}></div>
   </article>
 </Layout>

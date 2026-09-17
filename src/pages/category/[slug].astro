@@ -1,5 +1,25 @@
 ---
-import Layout from '../../layouts/Layout.astro'; import {posts} from '../../data/posts.js'; import taxonomies from '../../data/taxonomies.json';
-export function getStaticPaths(){return taxonomies.filter(x=>x.taxonomy==='category').map(x=>({params:{slug:x.slug},props:{tax:x}}));} const {tax}=Astro.props; const items=posts.filter(p=>tax.postIds.includes(p.id));
+import Layout from '../../layouts/Layout.astro';
+import PostList from '../../components/PostList.astro';
+import Pagination from '../../components/Pagination.astro';
+import { posts } from '../../data/posts.js';
+import categories from '../../data/categories.json';
+import { getCategoryPosts, getPage } from '../../lib/content.js';
+
+export function getStaticPaths() {
+  return categories.map((category) => ({ params: { slug: category.slug }, props: { category } }));
+}
+
+const { category } = Astro.props;
+const pageData = getPage(getCategoryPosts(posts, category.slug), 1);
 ---
-<Layout title={tax.name}><h1>{tax.name}</h1>{items.map(p=><article><h2><a href={`/${p.slug}/`}>{p.title}</a></h2><div class="post-meta">{p.date}</div></article>)}</Layout>
+
+<Layout title={`Categoria: ${category.name}`}>
+  <header class="page-heading">
+    <p class="eyebrow">Categorie</p>
+    <h1>{category.name}</h1>
+    <p>Articole din categoria {category.name}.</p>
+  </header>
+  <PostList posts={pageData.items} showExcerpt />
+  <Pagination basePath={`/category/${category.slug}/`} {...pageData} />
+</Layout>

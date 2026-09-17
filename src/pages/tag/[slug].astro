@@ -1,5 +1,0 @@
----
-import Layout from '../../layouts/Layout.astro'; import {posts} from '../../data/posts.js'; import taxonomies from '../../data/taxonomies.json';
-export function getStaticPaths(){return taxonomies.filter(x=>x.taxonomy==='post_tag').map(x=>({params:{slug:x.slug},props:{tax:x}}));} const {tax}=Astro.props; const items=posts.filter(p=>tax.postIds.includes(p.id));
----
-<Layout title={tax.name}><h1>{tax.name}</h1>{items.map(p=><article><h2><a href={`/${p.slug}/`}>{p.title}</a></h2><div class="post-meta">{p.date}</div></article>)}</Layout>

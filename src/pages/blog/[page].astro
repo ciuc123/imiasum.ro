@@ -3,12 +3,21 @@ import Layout from '../../layouts/Layout.astro';
 import PostList from '../../components/PostList.astro';
 import Pagination from '../../components/Pagination.astro';
 import { posts } from '../../data/posts.js';
-import { getPage } from '../../lib/content.js';
+import { getPage, POSTS_PER_PAGE } from '../../lib/content.js';
 
-const pageData = getPage(posts, 1);
+export function getStaticPaths() {
+  const totalPages = Math.ceil(posts.length / POSTS_PER_PAGE);
+  return Array.from({ length: Math.max(0, totalPages - 1) }, (_, index) => {
+    const page = index + 2;
+    return { params: { page: String(page) }, props: { page } };
+  });
+}
+
+const { page } = Astro.props;
+const pageData = getPage(posts, page);
 ---
 
-<Layout title="Blog">
+<Layout title={`Blog – pagina ${pageData.currentPage}`}>
   <header class="page-heading">
     <p class="eyebrow">Educație relațională</p>
     <h1>Blog</h1>

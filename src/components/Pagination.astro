@@ -1,0 +1,16 @@
+---
+import { pageUrl } from '../lib/content.js';
+const { basePath, currentPage, totalPages } = Astro.props;
+const previousUrl = currentPage > 1 ? pageUrl(basePath, currentPage - 1) : null;
+const nextUrl = currentPage < totalPages ? pageUrl(basePath, currentPage + 1) : null;
+---
+
+{totalPages > 1 && <nav class="pagination" aria-label="Paginare">
+  {previousUrl ? <a href={previousUrl} rel="prev" aria-label="Pagina anterioară">← Anterior</a> : <span class="pagination-disabled" aria-hidden="true">← Anterior</span>}
+  <div class="pagination-pages">
+    {Array.from({ length: totalPages }, (_, index) => index + 1).map((page) => page === currentPage
+      ? <span class="pagination-current" aria-current="page">{page}</span>
+      : <a href={pageUrl(basePath, page)} aria-label={`Pagina ${page}`}>{page}</a>)}
+  </div>
+  {nextUrl ? <a href={nextUrl} rel="next" aria-label="Pagina următoare">Următor →</a> : <span class="pagination-disabled" aria-hidden="true">Următor →</span>}
+</nav>}

@@ -1,4 +1,32 @@
 ---
-import Layout from '../layouts/Layout.astro'; import {posts} from '../data/posts.js'; const latest=posts.slice(0,20);
+import Layout from '../layouts/Layout.astro';
+import PostList from '../components/PostList.astro';
+import { posts } from '../data/posts.js';
+import categories from '../data/categories.json';
+
+const latest = posts.slice(0, 8);
 ---
-<Layout title="Educație Relațională"><h1>Educație Relațională</h1><p>Articole despre relații, cuplu, emoții și dezvoltare personală.</p>{latest.map(p=><article><h2><a href={`/${p.slug}/`}>{p.title}</a></h2><div class="post-meta">{p.date}</div>{p.excerpt&&<p>{p.excerpt}</p>}</article>)}</Layout>
+
+<Layout title="Educație Relațională">
+  <section class="hero">
+    <p class="eyebrow">imiasum.ro</p>
+    <h1>Educație Relațională</h1>
+    <p class="hero-intro">Un loc pentru idei despre relații, cuplu, emoții și felul în care ne construim viața interioară.</p>
+    <a class="button-link" href="/blog/">Vezi toate articolele</a>
+  </section>
+
+  <section aria-labelledby="latest-heading">
+    <div class="section-heading">
+      <h2 id="latest-heading">Articole recente</h2>
+      <a href="/blog/">Arhiva blogului →</a>
+    </div>
+    <PostList posts={latest} showExcerpt />
+  </section>
+
+  <section class="category-section" id="categorii" aria-labelledby="categories-heading">
+    <h2 id="categories-heading">Explorează categoriile</h2>
+    <div class="category-grid">
+      {categories.map((category) => <a href={`/category/${category.slug}/`}>{category.name}</a>)}
+    </div>
+  </section>
+</Layout>

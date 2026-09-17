@@ -1,0 +1,31 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import PostList from '../../../components/PostList.astro';
+import Pagination from '../../../components/Pagination.astro';
+import { posts } from '../../../data/posts.js';
+import categories from '../../../data/categories.json';
+import { getCategoryPosts, getPage, POSTS_PER_PAGE } from '../../../lib/content.js';
+
+export function getStaticPaths() {
+  return categories.flatMap((category) => {
+    const totalPages = Math.ceil(getCategoryPosts(posts, category.slug).length / POSTS_PER_PAGE);
+    return Array.from({ length: Math.max(0, totalPages - 1) }, (_, index) => ({
+      params: { slug: category.slug, page: String(index + 2) },
+      props: { category, page: index + 2 },
+    }));
+  });
+}
+
+const { category, page } = Astro.props;
+const pageData = getPage(getCategoryPosts(posts, category.slug), page);
+---
+
+<Layout title={`Categoria: ${category.name} – pagina ${pageData.currentPage}`}>
+  <header class="page-heading">
+    <p class="eyebrow">Categorie</p>
+    <h1>{category.name}</h1>
+    <p>Articole din categoria {category.name}.</p>
+  </header>
+  <PostList posts={pageData.items} showExcerpt />
+  <Pagination basePath={`/category/${category.slug}/`} {...pageData} />
+</Layout>
