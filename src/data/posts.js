@@ -20,6 +20,6 @@ const importedPosts = [
   ...y2024,
 ].sort((a, b) => new Date(b.date) - new Date(a.date));
 
-const removedPostIds = new Set([4601]);
+const removedPostIds = new Set([4589, 4601, 4618, 4650, 4668, 4682]);
 
 export const posts = importedPosts.filter((post) => !removedPostIds.has(post.id));
