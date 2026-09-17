@@ -1,11 +1,9 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import { posts } from '../data/posts.js';
-import pages from '../data/pages.json';
 
 export function getStaticPaths() {
-  const items = [...posts, ...pages];
-  return items.map((item) => ({
+  return posts.map((item) => ({
     params: { slug: item.slug },
     props: { item },
   }));
@@ -17,6 +15,6 @@ const { item } = Astro.props;
   <article>
     <h1>{item.title}</h1>
     {item.date && <div class="post-meta">{item.date}</div>}
-    <div class="content" set:html={item.content}></div>
+    <div class="post-content" set:html={item.content}></div>
   </article>
 </Layout>
