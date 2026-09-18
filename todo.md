@@ -67,7 +67,7 @@
 - [ ] Configure no build command
 - [ ] Configure root output directory
 - [ ] Commit and push coming-soon page
-- [ ] Attach imiasum.ro
+- [x] Attach imiasum.ro
 - [ ] Deploy and test coming-soon page
 
 ### development
