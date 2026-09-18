@@ -86,10 +86,10 @@
 
 ## 6. DNS Cutover
 
-- [ ] Verify imiasum.ro points to the Cloudflare Pages deployment
-- [ ] Configure www.imiasum.ro
-- [ ] Verify development.imiasum.ro
-- [ ] Verify HTTPS
+- [x] Verify imiasum.ro points to the Cloudflare Pages deployment
+- [x] Configure https://imiasum.ro/
+- [x] Verify https://development-imiasum-ro.andrei-eab.workers.dev/
+- [x] Verify HTTPS
 - [ ] Verify old post URLs
 - [ ] Verify sitemap
 - [ ] Verify RSS
@@ -100,21 +100,21 @@
 - [ ] Preserve original SQL backup
 - [ ] Preserve BackWPup archives
 - [ ] Preserve security/backdoor evidence
-- [ ] Remove WordPress EC2
-- [ ] Remove RDS/database resources if unused
+- [x] Remove WordPress EC2
+- [x] Remove RDS/database resources if unused
 - [ ] Remove unused S3 resources
-- [ ] Remove unused security groups/load balancers
-- [ ] Check AWS resources for anything remaining
-- [ ] Check AWS billing
+- [x] Remove unused security groups/load balancers
+- [x] Check AWS resources for anything remaining
+- [x] Check AWS billing
 
 ———
 
 ## Current Next Steps
 
-- [ ] Commit and push the main coming-soon page
-- [ ] Configure Cloudflare Pages for main
-- [ ] Configure the development branch deployment
-- [ ] Attach imiasum.ro and development.imiasum.ro
-- [ ] Verify DNS propagation and HTTPS
+- [x] Commit and push the main coming-soon page
+- [x] Configure Cloudflare Pages for main
+- [x] Configure the development branch deployment
+- [x] Attach imiasum.ro and development.imiasum.ro
+- [x] Verify DNS propagation and HTTPS
 - [ ] Consider Unicode normalization
-- [ ] AWS cleanup only after both deployments are confirmed stable
+- [x] AWS cleanup only after both deployments are confirmed stable
