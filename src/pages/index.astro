@@ -4,15 +4,41 @@ import PostList from '../components/PostList.astro';
 import { posts } from '../data/posts.js';
 import categories from '../data/categories.json';
 
-const latest = posts.slice(0, 8);
+const latest = posts.slice(0, 6);
+const highlights = [
+  {
+    title: 'Eseuri lungi',
+    text: 'Articole ample, scrise cu răbdare și gândite să lase loc de reflecție.',
+  },
+  {
+    title: 'Teme clare',
+    text: 'Relații, emoții, sens și felul în care oamenii cresc în timp.',
+  },
+  {
+    title: 'Arhivă ușor de parcurs',
+    text: 'Conținutul este organizat pe categorii și accesibil pe desktop sau mobil.',
+  },
+];
 ---
 
-<Layout title="Educație Relațională">
+<Layout
+  title="Educație Relațională"
+  description="Eseuri lungi despre relații, emoții și dezvoltare personală, organizate într-o arhivă clară și ușor de parcurs."
+>
   <section class="hero">
     <p class="eyebrow">imiasum.ro</p>
     <h1>Educație Relațională</h1>
-    <p class="hero-intro">Un loc pentru idei despre relații, cuplu, emoții și felul în care ne construim viața interioară.</p>
+    <p class="hero-intro">Un blog de long-form, cu texte limpezi și calme despre relații, cuplu, emoții și felul în care ne construim viața interioară.</p>
     <a class="button-link" href="/blog/">Vezi toate articolele</a>
+  </section>
+
+  <section class="highlights" aria-label="Repere">
+    {highlights.map((item) => (
+      <article class="highlight-card">
+        <h2>{item.title}</h2>
+        <p>{item.text}</p>
+      </article>
+    ))}
   </section>
 
   <section aria-labelledby="latest-heading">
