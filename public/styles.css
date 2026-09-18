@@ -1,13 +1,19 @@
 :root { --ink:#29252a; --muted:#746d76; --accent:#7a3b63; --soft:#f7f1f5; --line:#e5dfe3; }
 * { box-sizing:border-box; }
-body { max-width:980px; margin:0 auto; padding:0 24px; color:var(--ink); background:#fffdfd; font-family:Georgia,'Times New Roman',serif; line-height:1.65; }
+body { max-width:1180px; margin:0 auto; padding:0 24px; color:var(--ink); background:#fffdfd; font-family:Georgia,'Times New Roman',serif; line-height:1.65; }
 header.site-header { display:flex; justify-content:space-between; align-items:flex-start; gap:24px; padding:26px 0; border-bottom:1px solid var(--line); font-family:system-ui,sans-serif; }
 a { color:var(--accent); } a:hover { color:#4f2540; } header a { text-decoration:none; }
 .site-title { flex:0 0 auto; color:var(--ink); font-size:1.15rem; font-weight:700; }
-.site-navigation { display:flex; flex-direction:column; align-items:flex-end; gap:10px; max-width:70%; }
+.site-navigation { display:flex; align-items:flex-start; gap:20px; }
 .primary-nav { display:flex; gap:20px; font-size:.95rem; }
 .category-nav { display:flex; flex-wrap:wrap; justify-content:flex-end; gap:5px 12px; font-size:.8rem; text-align:right; }
-main { padding:48px 0 64px; } h1,h2,h3,h4 { line-height:1.2; } h1 { margin:.3rem 0 1rem; font-size:clamp(2rem,5vw,3.4rem); } h2 { margin:0 0 .5rem; font-size:1.55rem; } p { margin-top:0; }
+main { min-width:0; padding:48px 0 64px; } h1,h2,h3,h4 { line-height:1.2; } h1 { margin:.3rem 0 1rem; font-size:clamp(2rem,5vw,3.4rem); } h2 { margin:0 0 .5rem; font-size:1.55rem; } p { margin-top:0; }
+.site-layout { display:grid; grid-template-columns:minmax(0,1fr) 220px; gap:64px; }
+.category-sidebar { align-self:start; margin-top:48px; padding-left:24px; border-left:1px solid var(--line); font-family:system-ui,sans-serif; }
+.category-sidebar h2 { margin-bottom:1rem; font-size:1rem; }
+.category-sidebar nav { display:flex; flex-direction:column; gap:.55rem; font-size:.9rem; }
+.category-sidebar a { text-decoration:none; }
+.mobile-category-menu { display:none; }
 .hero { max-width:700px; padding:32px 0 58px; } .hero h1 { max-width:540px; } .hero-intro { max-width:620px; color:var(--muted); font-size:1.2rem; }
 .eyebrow { margin-bottom:.5rem; color:var(--accent); font-family:system-ui,sans-serif; font-size:.75rem; font-weight:700; letter-spacing:.12em; text-transform:uppercase; }
 .button-link { display:inline-block; margin-top:1rem; padding:.7rem 1rem; border-radius:4px; color:#fff; background:var(--accent); font-family:system-ui,sans-serif; font-size:.9rem; text-decoration:none; } .button-link:hover { color:#fff; background:#4f2540; }
@@ -17,8 +23,6 @@ main { padding:48px 0 64px; } h1,h2,h3,h4 { line-height:1.2; } h1 { margin:.3rem
 .post-meta { margin-bottom:.45rem; color:var(--muted); font-family:system-ui,sans-serif; font-size:.8rem; } .post-excerpt { max-width:760px; margin-bottom:.8rem; color:var(--muted); }
 .post-categories { display:flex; flex-wrap:wrap; gap:8px; font-family:system-ui,sans-serif; font-size:.76rem; } .post-categories a,.category-grid a { text-decoration:none; }
 .post-categories a { padding:.18rem .55rem; border-radius:999px; background:var(--soft); } .post-categories-detail { margin:1rem 0 2rem; }
-.category-section { margin-top:58px; padding-top:30px; border-top:1px solid var(--line); } .category-grid { display:flex; flex-wrap:wrap; gap:10px; margin-top:18px; }
-.category-grid a { padding:.55rem .8rem; border:1px solid var(--line); border-radius:4px; font-family:system-ui,sans-serif; font-size:.9rem; }
 .post-content { max-width:760px; margin-top:2.2rem; color:#302c30; font-size:1.1rem; line-height:1.85; } .post-content::after { content:''; display:table; clear:both; }
 .post-content p { margin:0 0 1.25rem; } .post-content h1,.post-content h2,.post-content h3,.post-content h4 { margin:2.5rem 0 1rem; }
 .post-content ul,.post-content ol { margin:1rem 0 1.5rem; padding-left:2rem; } .post-content li { margin-bottom:.5rem; }
@@ -31,5 +35,4 @@ main { padding:48px 0 64px; } h1,h2,h3,h4 { line-height:1.2; } h1 { margin:.3rem
 .pagination { display:flex; justify-content:space-between; align-items:center; gap:16px; margin-top:38px; font-family:system-ui,sans-serif; }
 .pagination a,.pagination-current,.pagination-disabled { padding:.45rem .65rem; } .pagination-pages { display:flex; flex-wrap:wrap; justify-content:center; gap:3px; }
 .pagination-current { border-radius:3px; color:#fff; background:var(--accent); } .pagination-disabled { color:#aaa; }
-footer { padding:25px 0 35px; border-top:1px solid var(--line); color:var(--muted); font-family:system-ui,sans-serif; font-size:.85rem; }
-@media (max-width:600px) { body { padding:0 16px; } header.site-header { align-items:flex-start; } .site-navigation { max-width:62%; } .category-nav { gap:4px 9px; font-size:.72rem; } main { padding-top:32px; } .hero { padding-top:10px; padding-bottom:38px; } .section-heading { display:block; } .section-heading a { display:inline-block; margin-bottom:8px; } .post-content { font-size:1rem; line-height:1.75; } .post-content .alignleft,.post-content .alignright { float:none; max-width:100%; margin:1.5rem auto; } .pagination { align-items:stretch; font-size:.85rem; } .pagination-pages { gap:0; } }
+@media (max-width:700px) { body { padding:0 16px; } header.site-header { align-items:flex-start; } .site-navigation { align-items:flex-end; gap:12px; } .site-layout { display:block; } .category-sidebar { display:none; } .mobile-category-menu { display:block; position:relative; font-size:.85rem; } .mobile-category-menu summary { cursor:pointer; color:var(--accent); } .mobile-category-menu .category-nav { display:flex; flex-direction:column; gap:7px; min-width:180px; margin-top:10px; padding:12px; border:1px solid var(--line); background:#fffdfd; } .mobile-category-menu .category-nav a { text-decoration:none; } main { padding-top:32px; } .section-heading { display:block; } .section-heading a { display:inline-block; margin-bottom:8px; } .post-content { font-size:1rem; line-height:1.75; } .post-content .alignleft,.post-content .alignright { float:none; max-width:100%; margin:1.5rem auto; } .pagination { align-items:stretch; font-size:.85rem; } .pagination-pages { gap:0; } }

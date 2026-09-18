@@ -66,18 +66,18 @@
 
 - [ ] Configure no build command
 - [ ] Configure root output directory
-- [ ] Commit and push coming-soon page
+- [x] Commit and push coming-soon page
 - [x] Attach imiasum.ro
-- [ ] Deploy and test coming-soon page
+- [x] Deploy and test coming-soon page
 
 ### development
 
-- [ ] Connect development branch deployment
+- [x] Connect development branch deployment
 - [x] Build command: npm run build
 - [x] Output directory: dist
 - [ ] Attach development.imiasum.ro
-- [ ] Deploy preview
-- [ ] Test homepage
+- [x] Deploy preview
+- [x] Test homepage
 - [ ] Test blog pagination
 - [ ] Test category pages
 - [ ] Test several old posts

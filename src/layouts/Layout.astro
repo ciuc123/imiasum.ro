@@ -25,18 +25,26 @@ const {
         <nav class="primary-nav" aria-label="Navigare principală">
             <a href="/blog/">Blog</a>
         </nav>
-        <nav class="category-nav" aria-label="Categorii">
-            {categories.map((category) => <a href={`/category/${category.slug}/`}>{category.name}</a>)}
-        </nav>
+        <details class="mobile-category-menu">
+            <summary>Categorii</summary>
+            <nav class="category-nav" aria-label="Categorii">
+                {categories.map((category) => <a href={`/category/${category.slug}/`}>{category.name}</a>)}
+            </nav>
+        </details>
     </div>
 </header>
 
-<main>
-    <slot />
-</main>
+<div class="site-layout">
+    <main>
+        <slot />
+    </main>
 
-<footer>
-    Educație Relațională
-</footer>
+    <aside class="category-sidebar" aria-labelledby="categories-heading">
+        <h2 id="categories-heading">Categorii</h2>
+        <nav aria-label="Categorii">
+            {categories.map((category) => <a href={`/category/${category.slug}/`}>{category.name}</a>)}
+        </nav>
+    </aside>
+</div>
 </body>
 </html>
