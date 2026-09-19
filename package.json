@@ -3,7 +3,9 @@
   "type": "module",
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "node ./scripts/build-and-copy.mjs",
+    "prestart": "npm run build",
+    "start": "node ./scripts/start-serve.mjs",
     "preview": "astro preview"
   },
   "dependencies": {
@@ -12,5 +14,8 @@
     "@astrojs/sitemap": "^3.7.4",
     "astro": "latest",
     "typescript": "^6.0.3"
+  },
+  "devDependencies": {
+    "live-server": "^1.2.1"
   }
 }

@@ -118,3 +118,27 @@
 - [x] Verify DNS propagation and HTTPS
 - [ ] Consider Unicode normalization
 - [x] AWS cleanup only after both deployments are confirmed stable
+
+---
+
+## Notes: deploying Astro to production
+
+When the `main` branch is replaced with a full Astro site, update CI / Cloudflare settings and `package.json` as follows:
+
+- package.json: ensure `build` runs `astro build` and the publish directory matches Astro's output (default: `dist`). Example:
+
+  "scripts": {
+    "build": "astro build",
+    "start": "astro preview --port=4321"
+  }
+
+- If you keep the simple coming-soon `main` and an Astro `development` branch, the repo now includes `scripts/build-and-copy.mjs` which auto-detects Astro and either runs `astro build` or performs the simple copy build used by the current `main` branch. This lets `npm run start` (which runs `npm run build` first) behave the same on either branch.
+
+- Cloudflare Pages (static): set the build command to `npm run build` and the publish directory to `dist`. No adapter required for Pages — just publish the built static files.
+
+- Cloudflare Workers (if you want dynamic Workers deployment): install the `@astrojs/cloudflare` adapter and follow the adapter instructions (update `astro.config.mjs`, add `wrangler`/`wrangler.toml`, and set the Pages/Worker build step to run `npm run build` and upload/serve the `dist` output or use the adapter to produce a Worker bundle).
+
+- CI / production notes: remove `live-server` from production installs (it's only a devDependency used for local testing). Use `astro preview` or your platform's preview server for verifying builds in CI.
+
+Keep this note as a reference when moving the production site to Astro.
+
