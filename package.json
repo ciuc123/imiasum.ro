@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "build": "mkdir -p dist && cp index.html dist/",
+    "build": "mkdir -p dist && cp index.html styles.css CNAME dist/",
     "dev": "live-server --port=4321 --no-browser --quiet",
     "start": "live-server dist --port=4321 --no-browser --quiet"
   },
