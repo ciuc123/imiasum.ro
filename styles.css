@@ -13,7 +13,8 @@ html { min-height: 100%; background: var(--cream); }
 
 body {
   min-width: 320px;
-  min-height: 100vh;
+  /* use the dynamic viewport unit so the layout matches the visible viewport on mobile browsers */
+  min-height: 100dvh;
   margin: 0;
   color: var(--ink);
   background:
@@ -29,7 +30,8 @@ a { color: inherit; }
   display: flex;
   flex-direction: column;
   width: min(100% - 48px, 1180px);
-  min-height: 100vh;
+  /* make the shell track the dynamic viewport height to avoid accidental overflow on mobile */
+  min-height: 100dvh;
   margin: 0 auto;
 }
 
@@ -76,7 +78,8 @@ a { color: inherit; }
   align-items: center;
   flex: 1;
   gap: clamp(40px, 9vw, 130px);
-  padding: clamp(65px, 11vh, 135px) 4vw clamp(70px, 12vh, 145px);
+  /* use dynamic viewport units (dvh) so padding calculations match the visible viewport height */
+  padding: clamp(65px, 11dvh, 135px) 4vw clamp(70px, 12dvh, 145px);
 }
 
 .copy-column { max-width: 620px; }
@@ -160,13 +163,21 @@ h1 em { color: var(--accent); font-weight: 400; }
 
 @media (max-width: 720px) {
   .page-shell { width: min(100% - 32px, 560px); }
-  .site-header { padding: 22px 0; }
+  .site-header { padding: 16px 0; }
   .header-note { font-size: .62rem; text-align: right; }
-  .coming-soon { display: flex; flex-direction: column; align-items: stretch; gap: 50px; padding: 72px 0 78px; }
-  h1 { font-size: clamp(3.2rem, 17vw, 6rem); }
-  .lead { margin-top: 28px; }
-  .art-column { align-self: center; width: min(78vw, 370px); min-width: 250px; }
-  .site-footer { flex-direction: column; gap: 7px; }
+  .coming-soon {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 28px;
+    padding: 28px 0 22px;
+  }
+  h1 { font-size: clamp(2.5rem, 13vw, 4.4rem); }
+  .lead { margin-top: 20px; font-size: clamp(1.02rem, 4.2vw, 1.18rem); }
+  .supporting-copy { margin-top: 14px; font-size: .95rem; line-height: 1.55; }
+  .signature { margin-top: 26px; }
+  .art-column { align-self: center; width: min(68vw, 290px); min-width: 0; }
+  .site-footer { flex-direction: column; gap: 7px; padding: 16px 0 18px; }
 }
 
 /* Prevent vertical page scrolling on larger (15"+) screens while keeping mobile scroll behavior.
@@ -188,3 +199,20 @@ h1 em { color: var(--accent); font-weight: 400; }
 @media (prefers-reduced-motion: reduce) {
   * { scroll-behavior: auto !important; }
 }
+
+/* On devices that support viewport-fit=cover we must respect the safe area insets
+   so content doesn't get pushed under rounded corners or the home indicator. env() will
+   evaluate to 0 on browsers that don't support it. */
+body {
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-left: env(safe-area-inset-left, 0px);
+  padding-right: env(safe-area-inset-right, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+@media (max-width: 720px) {
+  html, body {
+    overflow: hidden;
+  }
+}
+

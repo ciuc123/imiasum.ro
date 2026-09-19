@@ -1,6 +1,7 @@
 {
   "scripts": {
     "build": "mkdir -p dist && cp index.html styles.css CNAME dist/",
+    "prestart": "npm run build",
     "dev": "live-server --port=4321 --no-browser --quiet",
     "start": "live-server dist --port=4321 --no-browser --quiet"
   },
