@@ -169,6 +169,22 @@ h1 em { color: var(--accent); font-weight: 400; }
   .site-footer { flex-direction: column; gap: 7px; }
 }
 
+/* Prevent vertical page scrolling on larger (15"+) screens while keeping mobile scroll behavior.
+   On big viewports we make the shell match the viewport height and reduce the main area's
+   vertical padding so header + main + footer fit without the document overflowing. */
+@media (min-width: 1200px) and (min-height: 800px) {
+  .page-shell {
+    /* make the page shell exactly the viewport height */
+    height: 100vh;
+  }
+
+  .coming-soon {
+    /* reduce large viewport-based vertical padding so content fits alongside header/footer */
+    padding: 48px 4vw;
+    /* allow the grid to shrink inside the flex container without forcing overflow */
+    min-height: 0;
+  }
+}
 @media (prefers-reduced-motion: reduce) {
   * { scroll-behavior: auto !important; }
 }
