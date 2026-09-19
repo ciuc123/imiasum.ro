@@ -35,4 +35,47 @@ main { min-width:0; padding:48px 0 64px; } h1,h2,h3,h4 { line-height:1.2; } h1 {
 .pagination { display:flex; justify-content:space-between; align-items:center; gap:16px; margin-top:38px; font-family:system-ui,sans-serif; }
 .pagination a,.pagination-current,.pagination-disabled { padding:.45rem .65rem; } .pagination-pages { display:flex; flex-wrap:wrap; justify-content:center; gap:3px; }
 .pagination-current { border-radius:3px; color:#fff; background:var(--accent); } .pagination-disabled { color:#aaa; }
-@media (max-width:700px) { body { padding:0 16px; } header.site-header { align-items:flex-start; } .site-navigation { align-items:flex-end; gap:12px; } .site-layout { display:block; } .category-sidebar { display:none; } .mobile-category-menu { display:block; position:relative; font-size:.85rem; } .mobile-category-menu summary { cursor:pointer; color:var(--accent); } .mobile-category-menu .category-nav { display:flex; flex-direction:column; gap:7px; min-width:180px; margin-top:10px; padding:12px; border:1px solid var(--line); background:#fffdfd; } .mobile-category-menu .category-nav a { text-decoration:none; } main { padding-top:32px; } .section-heading { display:block; } .section-heading a { display:inline-block; margin-bottom:8px; } .post-content { font-size:1rem; line-height:1.75; } .post-content .alignleft,.post-content .alignright { float:none; max-width:100%; margin:1.5rem auto; } .pagination { align-items:stretch; font-size:.85rem; } .pagination-pages { gap:0; } }
+@media (max-width:700px) {
+  body { padding:0 16px; }
+  header.site-header { align-items:flex-start; }
+  /* Make header sticky so hamburger stays visible */
+  header.site-header { position:sticky; top:0; background:#fffdfd; z-index:1100; }
+  .site-navigation { align-items:flex-end; gap:12px; }
+  .site-layout { display:block; }
+  .category-sidebar { display:none; }
+
+  /* Mobile toggle button */
+  .mobile-category-toggle { display:inline-flex; align-items:center; gap:8px; background:none; border:0; color:var(--accent); font-size:.95rem; cursor:pointer; padding:.15rem .25rem; }
+
+  /* Hamburger icon */
+  .hamburger { display:inline-block; width:22px; height:16px; position:relative; }
+  .hamburger span { display:block; position:absolute; left:0; right:0; height:2px; background:var(--ink); border-radius:2px; }
+  .hamburger span:nth-child(1) { top:0; }
+  .hamburger span:nth-child(2) { top:7px; }
+  .hamburger span:nth-child(3) { bottom:0; }
+
+  /* Screen-reader only */
+  .visually-hidden { position:absolute !important; height:1px; width:1px; overflow:hidden; clip:rect(1px, 1px, 1px, 1px); white-space:nowrap; border:0; padding:0; margin:-1px; }
+
+  /* Full-screen overlay panel with slide-down animation */
+  .mobile-category-panel[hidden] { display:none; }
+  .mobile-category-panel { position:fixed; inset:0; background:rgba(0,0,0,0); display:flex; align-items:flex-start; justify-content:center; padding-top:0; z-index:1000; transition:background 220ms ease; }
+  .mobile-category-panel.open { background:rgba(0,0,0,0.35); }
+  .mobile-category-panel-inner { position:relative; background:#fffdfd; width:100%; height:100%; overflow:auto; padding:12px 18px; box-shadow:0 10px 30px rgba(0,0,0,0.2); transform:translateY(-100%); transition:transform 280ms cubic-bezier(.2,.9,.2,1); }
+  .mobile-category-panel.open .mobile-category-panel-inner { transform:translateY(0); }
+  .mobile-category-close { background:none; border:0; font-size:1.4rem; color:var(--muted); cursor:pointer; }
+
+  .mobile-category-panel-header { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:6px 4px; border-bottom:1px solid var(--line); }
+  .mobile-category-panel-header h2 { margin:0; font-size:1.15rem; }
+
+  .mobile-category-panel .category-nav { display:flex; flex-direction:column; gap:12px; margin-top:12px; font-size:1.05rem; }
+  .mobile-category-panel .category-nav a { text-decoration:none; padding:.6rem .6rem; border-radius:4px; color:var(--ink); }
+
+  main { padding-top:32px; }
+  .section-heading { display:block; }
+  .section-heading a { display:inline-block; margin-bottom:8px; }
+  .post-content { font-size:1rem; line-height:1.75; }
+  .post-content .alignleft,.post-content .alignright { float:none; max-width:100%; margin:1.5rem auto; }
+  .pagination { align-items:stretch; font-size:.85rem; }
+  .pagination-pages { gap:0; }
+}

@@ -25,12 +25,27 @@ const {
         <nav class="primary-nav" aria-label="Navigare principală">
             <a href="/blog/">Blog</a>
         </nav>
-        <details class="mobile-category-menu">
-            <summary>Categorii</summary>
-            <nav class="category-nav" aria-label="Categorii">
-                {categories.map((category) => <a href={`/category/${category.slug}/`}>{category.name}</a>)}
-            </nav>
-        </details>
+        <!-- Mobile hamburger toggle + full-screen overlay -->
+        <button class="mobile-category-toggle" aria-expanded="false" aria-controls="mobile-category-panel">
+            <span class="hamburger" aria-hidden="true">
+                <span></span>
+                <span></span>
+                <span></span>
+            </span>
+            <span class="visually-hidden">Categorii</span>
+        </button>
+
+        <div id="mobile-category-panel" class="mobile-category-panel" role="dialog" aria-modal="true" hidden>
+            <div class="mobile-category-panel-inner">
+                <header class="mobile-category-panel-header">
+                    <h2>Categorii</h2>
+                    <button class="mobile-category-close" aria-label="Close categories">✕</button>
+                </header>
+                <nav class="category-nav" aria-label="Categorii">
+                    {categories.map((category) => <a href={`/category/${category.slug}/`}>{category.name}</a>)}
+                </nav>
+            </div>
+        </div>
     </div>
 </header>
 
@@ -46,5 +61,47 @@ const {
         </nav>
     </aside>
 </div>
+
+<script>
+  // Toggle the mobile categories overlay with a top-to-bottom slide animation.
+  (function(){
+    try {
+      const btn = document.querySelector('.mobile-category-toggle');
+      const panel = document.getElementById('mobile-category-panel');
+      if (!btn || !panel) return;
+      const closeBtn = panel.querySelector('.mobile-category-close');
+
+      function openPanel(){
+        // Make panel present in DOM so CSS transitions can run
+        panel.removeAttribute('hidden');
+        // allow next frame for transition
+        requestAnimationFrame(()=> panel.classList.add('open'));
+        btn.setAttribute('aria-expanded','true');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closePanel(){
+        panel.classList.remove('open');
+        btn.setAttribute('aria-expanded','false');
+        // after transition ends, hide panel to remove from accessibility tree
+        const onEnd = (e)=>{
+          if (e.target !== panel && !panel.contains(e.target)) return;
+          panel.setAttribute('hidden','');
+          panel.removeEventListener('transitionend', onEnd);
+          document.body.style.overflow = '';
+        };
+        panel.addEventListener('transitionend', onEnd);
+      }
+
+      btn.addEventListener('click', function(){
+        if (panel.hasAttribute('hidden')) openPanel(); else closePanel();
+      });
+      closeBtn && closeBtn.addEventListener('click', closePanel);
+      panel.addEventListener('keydown', function(e){ if (e.key === 'Escape') closePanel(); });
+      panel.addEventListener('click', function(e){ if (e.target === panel) closePanel(); });
+    } catch (err) { console.error(err); }
+  })();
+</script>
+
 </body>
 </html>
