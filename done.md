@@ -127,6 +127,8 @@ Full checklist (archived copy with updates):
 - Mobile categories: In progress — started. The mobile category menu will be converted to a full-screen overlay to avoid right-side overflow. Work started on markup/CSS.
 - Post search: Planned — resume later. Recommended client-side search using `src/data/posts.js` (or a small static index) when ready.
 - If you want me to continue, I can open a PR with the mobile categories changes and implement the search next when you say so.
+ - [x] Mobile categories: implemented — full-screen overlay + hamburger toggle + accessibility (focus trap, ESC, close on backdrop) (2026-09-19 / 2026-09-21)
+ - [x] Post search: implemented — client-side search now fetches `/search-index.json` and falls back to an embedded payload. Added `scripts/generate-search-index.mjs` and integrated into `npm run build` (2026-09-21).
 
 (End of archive)
 

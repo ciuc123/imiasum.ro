@@ -6,6 +6,8 @@ import { posts } from '../../data/posts.js';
 import { getPage } from '../../lib/content.js';
 
 const pageData = getPage(posts, 1);
+// Prepare an encoded fallback search payload (safe to embed into client script)
+const FALLBACK_POSTS_ENCODED = encodeURIComponent(JSON.stringify(posts.map(p=>({slug:p.slug,title:p.title,excerpt:p.excerpt||'',content:p.content||'',date:p.date}))));
 ---
 
 <Layout title="Blog">
@@ -16,10 +18,10 @@ const pageData = getPage(posts, 1);
   </header>
   <div class="section-heading">
     <h2 class="section-title">Articole</h2>
-    <div class="search-box">
-      <input id="post-search-input" type="search" placeholder="Caută articole (minim 3 caractere)" aria-label="Caută articole" />
-      <button id="post-search-button">Caută</button>
-    </div>
+        <div class="search-box">
+          <input id="post-search-input" type="search" placeholder="Caută articole (minim 3 caractere)" aria-label="Caută articole" />
+          <button id="post-search-button">Caută</button>
+        </div>
   </div>
 
   <div id="search-results" style="display:none"></div>
@@ -30,8 +32,21 @@ const pageData = getPage(posts, 1);
   </div>
 
   <script type="module">
-    // Client-side search: inline minimal posts data
-    const POSTS = JSON.parse(decodeURIComponent(`${encodeURIComponent(JSON.stringify(posts.map(p=>({slug:p.slug,title:p.title,excerpt:p.excerpt||'',content:p.content||'',date:p.date}))))}`));
+    // Client-side search: try fetching a static search index first, fall back to inlined minimal posts
+    let POSTS = null;
+    const FALLBACK_POSTS = JSON.parse(decodeURIComponent(`\`${FALLBACK_POSTS_ENCODED}\``));
+
+    async function loadPostsIndex(){
+      if (POSTS) return POSTS;
+      try {
+        const res = await fetch('/search-index.json');
+        if (res.ok) { POSTS = await res.json(); return POSTS; }
+      } catch(e) {
+        // ignore
+      }
+      POSTS = FALLBACK_POSTS;
+      return POSTS;
+    }
 
     const input = document.getElementById('post-search-input');
     const button = document.getElementById('post-search-button');
@@ -74,9 +89,10 @@ const pageData = getPage(posts, 1);
       resultsEl.appendChild(pager);
     }
 
-    function doSearch(){
+    async function doSearch(){
       const q = input.value.trim().toLowerCase();
       if (q.length < 3) { resultsEl.style.display='none'; blogList.style.display='block'; return; }
+      await loadPostsIndex();
       currentResults = POSTS.filter(p => (p.title||'').toLowerCase().includes(q) || (p.excerpt||'').toLowerCase().includes(q) || (p.content||'').toLowerCase().includes(q));
       currentPage = 1;
       blogList.style.display='none';

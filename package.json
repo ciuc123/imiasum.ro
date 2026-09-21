@@ -3,7 +3,8 @@
   "type": "module",
   "scripts": {
     "dev": "astro dev",
-    "build": "node ./scripts/build-and-copy.mjs",
+    "build": "node ./scripts/generate-search-index.mjs && node ./scripts/build-and-copy.mjs",
+    "generate-search-index": "node ./scripts/generate-search-index.mjs",
     "prestart": "npm run build",
     "start": "node ./scripts/start-serve.mjs",
     "preview": "astro preview"
