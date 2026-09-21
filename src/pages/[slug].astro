@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import { posts } from '../data/posts.js';
+import PostPreviewCards from '../components/PostPreviewCards.astro';
 
 export function getStaticPaths() {
   return posts.map((item) => ({
@@ -20,5 +21,6 @@ const { item } = Astro.props;
       {item.categories.map((category) => <a href={`/category/${category.slug}/`}>{category.name}</a>)}
     </div>}
     <div class="post-content" set:html={item.content}></div>
+    <PostPreviewCards posts={posts} currentSlug={item.slug} />
   </article>
 </Layout>

@@ -79,3 +79,21 @@ main { min-width:0; padding:48px 0 64px; } h1,h2,h3,h4 { line-height:1.2; } h1 {
   .pagination { align-items:stretch; font-size:.85rem; }
   .pagination-pages { gap:0; }
 }
+
+/* Related posts */
+.related-posts { margin-top:3rem; border-top:1px solid var(--line); padding-top:20px; }
+.related-posts h3 { margin:0 0 12px; font-size:1.1rem; }
+.related-grid { display:flex; gap:14px; flex-wrap:wrap; }
+.related-card { flex:1 1 220px; padding:12px; border-radius:6px; background:var(--soft); }
+.related-card h4 { margin:0 0 .5rem; }
+.related-excerpt { margin:0 0 .5rem; color:var(--muted); }
+.related-meta { margin:0; font-size:.85rem; color:var(--muted); }
+
+/* Search box */
+.search-box { display:flex; gap:8px; align-items:center; }
+.search-box input[type="search"] { padding:.5rem .6rem; border:1px solid var(--line); border-radius:6px; font-size:1rem; }
+.search-box button { padding:.5rem .7rem; border:0; background:var(--accent); color:#fff; border-radius:6px; cursor:pointer; }
+
+/* Search results reuse .post-list & .post-card styles; ensure container spacing */
+#search-results { margin-top:18px; }
+

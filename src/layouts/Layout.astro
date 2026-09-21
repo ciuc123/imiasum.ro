@@ -71,24 +71,53 @@ const {
       if (!btn || !panel) return;
       const closeBtn = panel.querySelector('.mobile-category-close');
 
+      let previouslyFocused = null;
+      let trapHandler = null;
+
+      function getFocusableElements(container){
+        return Array.from(container.querySelectorAll('a[href], button:not([disabled]), input, textarea, [tabindex]:not([tabindex="-1"])'))
+          .filter((el) => el.offsetWidth > 0 || el.offsetHeight > 0);
+      }
+
       function openPanel(){
-        // Make panel present in DOM so CSS transitions can run
+        previouslyFocused = document.activeElement;
         panel.removeAttribute('hidden');
-        // allow next frame for transition
         requestAnimationFrame(()=> panel.classList.add('open'));
         btn.setAttribute('aria-expanded','true');
         document.body.style.overflow = 'hidden';
+
+        // focus first focusable item (close button or first link)
+        const focusable = getFocusableElements(panel);
+        if (focusable.length) focusable[0].focus();
+
+        // trap Tab within the panel
+        trapHandler = function(e){
+          if (e.key !== 'Tab') return;
+          const nodes = getFocusableElements(panel);
+          if (!nodes.length) return;
+          const first = nodes[0];
+          const last = nodes[nodes.length - 1];
+          if (e.shiftKey && document.activeElement === first){
+            e.preventDefault(); last.focus();
+          } else if (!e.shiftKey && document.activeElement === last){
+            e.preventDefault(); first.focus();
+          }
+        };
+        panel.addEventListener('keydown', trapHandler);
       }
 
       function closePanel(){
         panel.classList.remove('open');
         btn.setAttribute('aria-expanded','false');
+        // remove trap immediately
+        if (trapHandler) panel.removeEventListener('keydown', trapHandler);
         // after transition ends, hide panel to remove from accessibility tree
         const onEnd = (e)=>{
           if (e.target !== panel && !panel.contains(e.target)) return;
           panel.setAttribute('hidden','');
           panel.removeEventListener('transitionend', onEnd);
           document.body.style.overflow = '';
+          try { previouslyFocused && previouslyFocused.focus && previouslyFocused.focus(); } catch (err) { /* ignore */ }
         };
         panel.addEventListener('transitionend', onEnd);
       }

@@ -1,0 +1,17 @@
+---
+const { posts = [], currentSlug = '', count = 3 } = Astro.props;
+---
+
+<section class="related-posts">
+  <h3>Alte articole</h3>
+  <div class="related-grid">
+    {posts.filter(p => p.slug !== currentSlug).slice(0, count).map(p => (
+      <article class="related-card">
+        <h4><a href={`/${p.slug}/`}>{p.title}</a></h4>
+        {p.excerpt && <p class="related-excerpt">{p.excerpt}</p>}
+        {p.date && <p class="related-meta"><time datetime={p.date}>{p.date}</time></p>}
+      </article>
+    ))}
+  </div>
+</section>
+
