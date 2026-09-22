@@ -23,29 +23,39 @@ import { posts } from '../data/posts.js';
 </head>
 
 <body>
-<header class="site-header">
-    <a class="site-title" href="/">Educație Relațională</a>
+<header class="site-header" id="site-header">
+    <div class="header-top">
+        <a class="site-title" href="/">Educație Relațională</a>
 
-    <div class="header-search-desktop">
-        <div class="search-box">
-            <input id="global-search-input" type="search" placeholder="Caută articole..." aria-label="Caută articole" />
-            <button id="global-search-button">Caută</button>
+        <div class="header-search-desktop">
+            <div class="search-box">
+                <input id="global-search-input" type="search" placeholder="Caută articole..." aria-label="Caută articole" />
+                <button id="global-search-button">Caută</button>
+            </div>
         </div>
+
+        <nav class="primary-nav" aria-label="Navigare principală">
+            <a href="/blog/">Toate postarile</a>
+        </nav>
+
+        <!-- Mobile hamburger toggle for Blog + Categories -->
+        <button class="mobile-nav-toggle" aria-expanded="false" aria-controls="mobile-nav-panel">
+            <span class="hamburger" aria-hidden="true">
+                <span></span>
+                <span></span>
+                <span></span>
+            </span>
+            <span class="visually-hidden">Meniu</span>
+        </button>
     </div>
 
-    <nav class="primary-nav" aria-label="Navigare principală">
-        <a href="/blog/">Toate postarile</a>
-    </nav>
-
-    <!-- Mobile hamburger toggle for Blog + Categories -->
-    <button class="mobile-nav-toggle" aria-expanded="false" aria-controls="mobile-nav-panel">
-        <span class="hamburger" aria-hidden="true">
-            <span></span>
-            <span></span>
-            <span></span>
-        </span>
-        <span class="visually-hidden">Meniu</span>
-    </button>
+    <!-- Mobile search bar (inside header on mobile) -->
+    <div class="header-search-mobile">
+        <div class="search-box">
+            <input id="global-search-input-mobile" type="search" placeholder="Caută articole..." aria-label="Caută articole" />
+            <button id="global-search-button-mobile">Caută</button>
+        </div>
+    </div>
 
     <div id="mobile-nav-panel" class="mobile-nav-panel" role="dialog" aria-modal="true" hidden>
         <div class="mobile-nav-panel-inner">
@@ -64,13 +74,6 @@ import { posts } from '../data/posts.js';
     </div>
 </header>
 
-<!-- Mobile search bar (sticky, below header) -->
-<div class="header-search-mobile">
-    <div class="search-box">
-        <input id="global-search-input-mobile" type="search" placeholder="Caută articole..." aria-label="Caută articole" />
-        <button id="global-search-button-mobile">Caută</button>
-    </div>
-</div>
 
 <div class="site-layout">
     <main>
@@ -88,7 +91,33 @@ import { posts } from '../data/posts.js';
 <!-- Inject fallback posts JSON before the search module -->
 <script set:html={`window.FALLBACK_POSTS = ${FALLBACK_POSTS_JSON};`}></script>
 
-<!-- Hamburger menu functionality -->
+<!-- Header scroll behavior (hide/show on scroll) -->
+<script>
+  (function(){
+    const header = document.getElementById('site-header');
+    if (!header) return;
+
+    let lastScrollY = 0;
+    let isHeaderHidden = false;
+
+    window.addEventListener('scroll', () => {
+      const currentScrollY = window.scrollY;
+
+      // If scrolling down and past 50px, hide header
+      if (currentScrollY > lastScrollY && currentScrollY > 50 && !isHeaderHidden) {
+        header.classList.add('header-hidden');
+        isHeaderHidden = true;
+      }
+      // If scrolling up, show header
+      else if (currentScrollY < lastScrollY && isHeaderHidden) {
+        header.classList.remove('header-hidden');
+        isHeaderHidden = false;
+      }
+
+      lastScrollY = currentScrollY;
+    }, false);
+  })();
+</script>
 <script>
   (function(){
     try {

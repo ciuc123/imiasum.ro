@@ -60,6 +60,33 @@ Verified all [x] completed items are working. Fixed several issues and improved 
 
 **Status**: Blog experience significantly improved. Navigation clearer, pagination scales better, content loads faster visually.
 
+**Mobile Header Improved (2026-09-22 final):**
+- [x] **Mobile search bar fully integrated into header**
+  - Search bar was floating separately and only half-visible
+  - Now part of header structure (two-row layout)
+  - Row 1: Title | Hamburger menu (12px padding)
+  - Row 2: Full-width search bar
+  - Search always fully visible and accessible
+
+- [x] **Smart header hide/show on scroll**
+  - Header hides when scrolling down (more reading space)
+  - Header reappears when scrolling up (user wants navigation)
+  - Uses `transform: translateY(-100%)` for smooth animation
+  - Desktop header (always visible) not affected
+  - Mobile only behavior
+  
+**How it works:**
+- Scroll position tracking: detects scroll direction
+- Hide threshold: Only hides after scrolling past 50px (prevents accidental hiding)
+- Smooth animation: 300ms cubic-bezier easing for professional feel
+- Search bar travels with header (no separate positioning needed)
+
+**Result:** Mobile users get:
+- Clean, compact header when reading content
+- Instant access to search when they scroll up
+- Search bar always fully visible (not clipped)
+- Better mobile experience overall
+
 ---
 
 ## Summary of confirmations made during archive:
