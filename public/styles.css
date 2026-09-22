@@ -120,6 +120,13 @@ main { min-width:0; padding:48px 0 64px; } h1,h2,h3,h4 { line-height:1.2; } h1 {
 .header-search-desktop .search-box input { min-width:250px; }
 .header-search-desktop .search-box button { padding:.5rem 1rem; }
 
-/* Search results reuse .post-list & .post-card styles; ensure container spacing */
+/* Search results container */
+#global-search-results { margin:20px 0; padding:20px 0; border-top:1px solid var(--line); }
+#global-search-results .post-list { margin-bottom:20px; }
+
+/* Search success message */
+.search-success-message { padding:16px; margin:0 0 24px; background:rgba(122,59,99,0.08); border-radius:6px; border-left:4px solid var(--accent); }
+.search-success-message p { margin:0; color:var(--ink); font-size:.95rem; }
+.search-success-message strong { font-weight:600; color:var(--accent); }
 #search-results { margin-top:18px; }
 

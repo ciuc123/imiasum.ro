@@ -29,6 +29,16 @@ Updated: 2026-09-22
   - Header hides on scroll-down, shows on scroll-up for better UX
   - Uses `transform: translateY(-100%)` for smooth animation
 
+- [x] **Fix global search results display** — Show list instead of single post (FIXED 2026-09-22)
+  - Search now displays results as a paginated list on the page
+  - Works on desktop and mobile
+  - Shows up to 10 results per page with pagination controls
+  - Click on a result to visit the full post
+  - Mobile search auto-scrolls to results
+  - Success message shows count of results found
+  - Main page content hidden while viewing search results
+  - Clear search input to return to normal page view
+
 ---
 
 ## 🎨 High Priority: Modernize Blog UX

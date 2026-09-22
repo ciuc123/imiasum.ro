@@ -74,18 +74,22 @@ Verified all [x] completed items are working. Fixed several issues and improved 
   - Uses `transform: translateY(-100%)` for smooth animation
   - Desktop header (always visible) not affected
   - Mobile only behavior
-  
-**How it works:**
-- Scroll position tracking: detects scroll direction
-- Hide threshold: Only hides after scrolling past 50px (prevents accidental hiding)
-- Smooth animation: 300ms cubic-bezier easing for professional feel
-- Search bar travels with header (no separate positioning needed)
 
-**Result:** Mobile users get:
-- Clean, compact header when reading content
-- Instant access to search when they scroll up
-- Search bar always fully visible (not clipped)
-- Better mobile experience overall
+**Global Search Behavior Fixed (2026-09-22 final):**
+- [x] **Search now displays results list** (was: navigating to first result)
+  - Added `#global-search-results` container in main layout
+  - Added `#main-content` wrapper to hide page content when searching
+  - Results display with pagination (10 per page)
+  - Shows title, date, excerpt for each result
+  - Clickable result links to full post
+  - Mobile search auto-scrolls to results
+  - Works on all pages (not just blog)
+
+- [x] **Only one search results list shown** (was: showing 2 lists)
+  - Main page content hidden when search results displayed
+  - Clearing search input returns to normal page view
+  - Success message shows count: "S-au găsit X rezultate:"
+  - Clean UX: user knows exactly what they're viewing
 
 ---
 

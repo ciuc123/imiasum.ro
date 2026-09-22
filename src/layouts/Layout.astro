@@ -77,7 +77,13 @@ import { posts } from '../data/posts.js';
 
 <div class="site-layout">
     <main>
-        <slot />
+        <!-- Global search results container -->
+        <div id="global-search-results" style="display:none;"></div>
+
+        <!-- Main page content -->
+        <div id="main-content">
+            <slot />
+        </div>
     </main>
 
     <aside class="category-sidebar" aria-labelledby="categories-heading">
@@ -224,37 +230,173 @@ import { posts } from '../data/posts.js';
     );
   }
 
-  // Handle desktop search
-  if (desktopButton && desktopInput) {
-    desktopButton.addEventListener('click', async () => {
-      const q = desktopInput.value.trim().toLowerCase();
-      if (q.length < 3) return;
-      const results = await performSearch(q);
-      if (results && results.length > 0) {
-        // Navigate to first result
-        window.location.href = `/${results[0].slug}/`;
-      }
-    });
-    desktopInput.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') desktopButton.click();
-    });
-  }
+   // Desktop search
+   if (desktopButton && desktopInput) {
+     desktopButton.addEventListener('click', async () => {
+       const q = desktopInput.value.trim().toLowerCase();
+       if (q.length < 3) return;
+       const results = await performSearch(q);
+       displaySearchResults(results, 1);
+     });
+     desktopInput.addEventListener('keydown', (e) => {
+       if (e.key === 'Enter') desktopButton.click();
+     });
+   }
 
-  // Handle mobile search
-  if (mobileButton && mobileInput) {
-    mobileButton.addEventListener('click', async () => {
-      const q = mobileInput.value.trim().toLowerCase();
-      if (q.length < 3) return;
-      const results = await performSearch(q);
-      if (results && results.length > 0) {
-        // Navigate to first result
-        window.location.href = `/${results[0].slug}/`;
+   // Handle mobile search
+   if (mobileButton && mobileInput) {
+     mobileButton.addEventListener('click', async () => {
+       const q = mobileInput.value.trim().toLowerCase();
+       if (q.length < 3) return;
+       const results = await performSearch(q);
+       displaySearchResults(results, 1);
+       // Scroll to results on mobile
+       setTimeout(() => {
+         const resultsEl = document.getElementById('global-search-results');
+         if (resultsEl && resultsEl.style.display !== 'none') {
+           resultsEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+         }
+       }, 100);
+     });
+     mobileInput.addEventListener('keydown', (e) => {
+       if (e.key === 'Enter') mobileButton.click();
+     });
+   }
+
+    // Display search results with pagination
+    function displaySearchResults(allResults, page = 1) {
+      const resultsEl = document.getElementById('global-search-results');
+      const mainContent = document.getElementById('main-content');
+      if (!resultsEl || !mainContent) return;
+
+      const PER_PAGE = 10;
+      const totalPages = Math.ceil(allResults.length / PER_PAGE);
+      const start = (page - 1) * PER_PAGE;
+      const pageItems = allResults.slice(start, start + PER_PAGE);
+
+      resultsEl.innerHTML = '';
+      mainContent.style.display = 'none';
+
+      // Success message
+      const message = document.createElement('div');
+      message.className = 'search-success-message';
+      message.innerHTML = `<p>S-au găsit <strong>${allResults.length}</strong> rezultat${allResults.length !== 1 ? 'e' : ''}:</p>`;
+      resultsEl.appendChild(message);
+
+      if (pageItems.length === 0) {
+        resultsEl.innerHTML = '<p style="padding: 20px; text-align: center; color: #746d76;">Nu s-au găsit rezultate.</p>';
+        resultsEl.style.display = 'block';
+        return;
       }
-    });
-    mobileInput.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') mobileButton.click();
-    });
-  }
+
+      // Results list
+      const list = document.createElement('div');
+      list.className = 'post-list';
+      for (const p of pageItems) {
+        const article = document.createElement('article');
+        article.className = 'post-card';
+        article.innerHTML = `<p class="post-meta"><time datetime="${p.date}">${p.date||''}</time></p><h2><a href="/${p.slug}/">${p.title}</a></h2>${p.excerpt?`<p class="post-excerpt">${p.excerpt}</p>`:''}`;
+        list.appendChild(article);
+      }
+      resultsEl.appendChild(list);
+
+      // Pagination
+      if (totalPages > 1) {
+        const pager = document.createElement('nav');
+        pager.className = 'pagination';
+        pager.setAttribute('aria-label', 'Paginare rezultate');
+
+        // Previous button
+        if (page > 1) {
+          const prev = document.createElement('a');
+          prev.href = '#';
+          prev.textContent = '← Anterior';
+          prev.addEventListener('click', (e) => {
+            e.preventDefault();
+            displaySearchResults(allResults, page - 1);
+            resultsEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          });
+          pager.appendChild(prev);
+        } else {
+          const span = document.createElement('span');
+          span.className = 'pagination-disabled';
+          span.textContent = '← Anterior';
+          pager.appendChild(span);
+        }
+
+        // Page numbers
+        const pages = document.createElement('div');
+        pages.className = 'pagination-pages';
+        for (let i = 1; i <= totalPages; i++) {
+          if (i === page) {
+            const span = document.createElement('span');
+            span.className = 'pagination-current';
+            span.setAttribute('aria-current', 'page');
+            span.textContent = String(i);
+            pages.appendChild(span);
+          } else {
+            const link = document.createElement('a');
+            link.href = '#';
+            link.textContent = String(i);
+            link.addEventListener('click', (e) => {
+              e.preventDefault();
+              displaySearchResults(allResults, i);
+              resultsEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+            pages.appendChild(link);
+          }
+        }
+        pager.appendChild(pages);
+
+        // Next button
+        if (page < totalPages) {
+          const next = document.createElement('a');
+          next.href = '#';
+          next.textContent = 'Următor →';
+          next.addEventListener('click', (e) => {
+            e.preventDefault();
+            displaySearchResults(allResults, page + 1);
+            resultsEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          });
+          pager.appendChild(next);
+        } else {
+          const span = document.createElement('span');
+          span.className = 'pagination-disabled';
+          span.textContent = 'Următor →';
+          pager.appendChild(span);
+        }
+
+        resultsEl.appendChild(pager);
+      }
+
+      resultsEl.style.display = 'block';
+    }
+
+    // Clear search results and show main content
+    function clearSearchResults() {
+      const resultsEl = document.getElementById('global-search-results');
+      const mainContent = document.getElementById('main-content');
+      if (resultsEl && mainContent) {
+        resultsEl.style.display = 'none';
+        mainContent.style.display = 'block';
+      }
+    }
+
+    // Clear results when user clears the search input
+    if (desktopInput) {
+      desktopInput.addEventListener('input', (e) => {
+        if (e.target.value.trim().length === 0) {
+          clearSearchResults();
+        }
+      });
+    }
+    if (mobileInput) {
+      mobileInput.addEventListener('input', (e) => {
+        if (e.target.value.trim().length === 0) {
+          clearSearchResults();
+        }
+      });
+    }
 </script>
 
 </body>
