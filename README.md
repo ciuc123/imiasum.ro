@@ -112,3 +112,62 @@ examples for a particular workflow (e.g. migrate from a SQL dump to a local
 preview), open an issue or ask for more details and I can add step-by-step
 instructions.
 
+
+## Adding a New Post
+
+To add a new post to the blog:
+
+### 1. Add post data to the appropriate year file
+
+Posts are organized by year in `src/data/`. For example, to add a 2026 post:
+
+1. Open or create `src/data/2026.json` (if the file doesn't exist)
+2. Add a post object to the array:
+
+```json
+{
+  "slug": "my-new-post",
+  "title": "My New Post Title",
+  "date": "2026-09-22",
+  "excerpt": "Brief summary of the post...",
+  "content": "<p>HTML content of the post...</p>",
+  "categories": [
+    {
+      "slug": "category-slug",
+      "name": "Category Name"
+    }
+  ]
+}
+```
+
+### 2. Ensure data consistency
+
+- **slug**: URL-safe identifier (lowercase, hyphens only, no spaces)
+- **date**: ISO format (YYYY-MM-DD)
+- **content**: HTML (can include inline styles, images with paths like `public/uploads/2026/09/image.jpg`)
+- **categories**: Reference existing categories from `src/data/categories.json`, or the post will have no categories
+
+### 3. Build and test locally
+
+```bash
+npm run dev
+```
+
+Then navigate to `http://localhost:3000/my-new-post/` to view the post.
+
+The blog index will automatically include the new post in the correct chronological position.
+
+### 4. Deploy
+
+```bash
+npm run build
+```
+
+This will:
+- Generate the static site in `dist/`
+- Regenerate `public/search-index.json` (includes your new post in search)
+- Create the new post page and update blog indexes/pagination
+
+Push to your deployment branch (e.g., `main` or `development` for Cloudflare Pages).
+
+

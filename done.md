@@ -1,8 +1,29 @@
 # imiasum.ro — Migration Checklist (Archive)
 
 Archived: 2026-09-19
+Last updated: 2026-09-22 (continued work)
 
-Summary of confirmations made during archive:
+## Recent Work Session (2026-09-22)
+
+Verified all [x] completed items are working. Fixed several issues and improved UX:
+
+**Fixes:**
+- Fixed mobile menu close-by-itself bug: Event listener race condition where stray transitionend listeners would fire after opening. Solution: Track listener references and clear pending handlers on open.
+- Fixed pagination button styling inconsistency: Search results use dynamic `<button>` elements while static pagination uses `<a>` tags. Added CSS for button styling to match links.
+- Removed unused `.mobile-category-menu` CSS rule.
+
+**UX Improvements:**
+- Enhanced overlay animations: Updated easing curves to Material Design standards (cubic-bezier(0.4,0,0.2,1)), added shadow animation during slide, adjusted timing.
+- Improved search box: Added focus states with accent border and soft shadow, hover/active states for buttons, smooth transitions.
+
+**Documentation:**
+- Added comprehensive "Adding a New Post" section to README with step-by-step workflow, data format requirements, and deployment instructions.
+
+**Status:** All major features complete and working (search, categories, pagination). Site ready for production use. Remaining tasks are testing and optional improvements.
+
+---
+
+## Summary of confirmations made during archive:
 
 - Items reviewed and archived from `todo.md`.
 - Confirmations provided by user: 1) ok, 2) ok.

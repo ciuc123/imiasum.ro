@@ -72,62 +72,69 @@ import categories from '../data/categories.json';
       if (!btn || !panel) return;
       const closeBtn = panel.querySelector('.mobile-category-close');
 
-      let previouslyFocused = null;
-      let trapHandler = null;
+       let previouslyFocused = null;
+       let trapHandler = null;
+       let closeTimeoutId = null;
+       let closeTransitionHandler = null;
 
-      function getFocusableElements(container){
-        return Array.from(container.querySelectorAll('a[href], button:not([disabled]), input, textarea, [tabindex]:not([tabindex="-1"])'))
-          .filter((el) => el.offsetWidth > 0 || el.offsetHeight > 0);
-      }
+       function getFocusableElements(container){
+         return Array.from(container.querySelectorAll('a[href], button:not([disabled]), input, textarea, [tabindex]:not([tabindex="-1"])'))
+           .filter((el) => el.offsetWidth > 0 || el.offsetHeight > 0);
+       }
 
-      function openPanel(){
-        previouslyFocused = document.activeElement;
-        panel.removeAttribute('hidden');
-        requestAnimationFrame(()=> panel.classList.add('open'));
-        btn.setAttribute('aria-expanded','true');
-        document.body.style.overflow = 'hidden';
+       function openPanel(){
+         previouslyFocused = document.activeElement;
+         // Clear any pending close handlers to prevent race conditions
+         if (closeTimeoutId) { clearTimeout(closeTimeoutId); closeTimeoutId = null; }
+         if (closeTransitionHandler) { panel.removeEventListener('transitionend', closeTransitionHandler); closeTransitionHandler = null; }
 
-        // focus first focusable item (close button or first link)
-        const focusable = getFocusableElements(panel);
-        if (focusable.length) focusable[0].focus();
+         panel.removeAttribute('hidden');
+         requestAnimationFrame(()=> panel.classList.add('open'));
+         btn.setAttribute('aria-expanded','true');
+         document.body.style.overflow = 'hidden';
 
-        // trap Tab within the panel
-        trapHandler = function(e){
-          if (e.key !== 'Tab') return;
-          const nodes = getFocusableElements(panel);
-          if (!nodes.length) return;
-          const first = nodes[0];
-          const last = nodes[nodes.length - 1];
-          if (e.shiftKey && document.activeElement === first){
-            e.preventDefault(); last.focus();
-          } else if (!e.shiftKey && document.activeElement === last){
-            e.preventDefault(); first.focus();
-          }
-        };
-        panel.addEventListener('keydown', trapHandler);
-      }
+         // focus first focusable item (close button or first link)
+         const focusable = getFocusableElements(panel);
+         if (focusable.length) focusable[0].focus();
 
-      function closePanel(){
-        panel.classList.remove('open');
-        btn.setAttribute('aria-expanded','false');
-        // remove trap immediately
-        try { if (trapHandler) panel.removeEventListener('keydown', trapHandler); } catch (err) { /* ignore */ }
-        // after transition ends, hide panel to remove from accessibility tree
-        const onEnd = (e)=>{
-          if (e.target !== panel && !panel.contains(e.target)) return;
-          panel.setAttribute('hidden','');
-          panel.removeEventListener('transitionend', onEnd);
-          document.body.style.overflow = '';
-          try { previouslyFocused && previouslyFocused.focus && previouslyFocused.focus(); } catch (err) { /* ignore */ }
-        };
-        // If there's no CSS transition, transitionend may never fire. Add a
-        // timeout fallback to ensure the panel is hidden and body scroll is
-        // restored.
-        let timeoutId = null;
-        const clearFallback = ()=>{ if (timeoutId) { clearTimeout(timeoutId); timeoutId = null; } };
-        panel.addEventListener('transitionend', function te(e){ onEnd(e); clearFallback(); });
-        timeoutId = setTimeout(()=>{ try { onEnd({ target: panel }); } catch (_){}; clearFallback(); }, 350);
-      }
+         // trap Tab within the panel
+         trapHandler = function(e){
+           if (e.key !== 'Tab') return;
+           const nodes = getFocusableElements(panel);
+           if (!nodes.length) return;
+           const first = nodes[0];
+           const last = nodes[nodes.length - 1];
+           if (e.shiftKey && document.activeElement === first){
+             e.preventDefault(); last.focus();
+           } else if (!e.shiftKey && document.activeElement === last){
+             e.preventDefault(); first.focus();
+           }
+         };
+         panel.addEventListener('keydown', trapHandler);
+       }
+
+       function closePanel(){
+         panel.classList.remove('open');
+         btn.setAttribute('aria-expanded','false');
+         // remove trap immediately
+         try { if (trapHandler) panel.removeEventListener('keydown', trapHandler); } catch (err) { /* ignore */ }
+         // after transition ends, hide panel to remove from accessibility tree
+         const onEnd = (e)=>{
+           if (e.target !== panel && !panel.contains(e.target)) return;
+           panel.setAttribute('hidden','');
+           if (closeTransitionHandler) { panel.removeEventListener('transitionend', closeTransitionHandler); }
+           closeTransitionHandler = null;
+           document.body.style.overflow = '';
+           try { previouslyFocused && previouslyFocused.focus && previouslyFocused.focus(); } catch (err) { /* ignore */ }
+         };
+         // If there's no CSS transition, transitionend may never fire. Add a
+         // timeout fallback to ensure the panel is hidden and body scroll is
+         // restored.
+         const clearFallback = ()=>{ if (closeTimeoutId) { clearTimeout(closeTimeoutId); closeTimeoutId = null; } };
+         closeTransitionHandler = (e) => { onEnd(e); clearFallback(); };
+         panel.addEventListener('transitionend', closeTransitionHandler);
+         closeTimeoutId = setTimeout(()=>{ try { onEnd({ target: panel }); } catch (_){}; clearFallback(); }, 350);
+       }
 
       btn.addEventListener('click', function(){
         if (panel.hasAttribute('hidden')) openPanel(); else closePanel();
