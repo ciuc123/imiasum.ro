@@ -3,7 +3,7 @@ import Layout from '../../layouts/Layout.astro';
 import PostList from '../../components/PostList.astro';
 import Pagination from '../../components/Pagination.astro';
 import { posts } from '../../data/posts.js';
-import { getPage, POSTS_PER_PAGE } from '../../lib/content.js';
+import { getPage, POSTS_PER_PAGE, pageUrl } from '../../lib/content.js';
 
 export function getStaticPaths() {
   const totalPages = Math.ceil(posts.length / POSTS_PER_PAGE);
@@ -19,7 +19,7 @@ const pageData = getPage(posts, page);
 const FALLBACK_POSTS_ENCODED = encodeURIComponent(JSON.stringify(posts.map(p=>({slug:p.slug,title:p.title,excerpt:p.excerpt||'',content:p.content||'',date:p.date}))));
 ---
 
-<Layout title={`Blog – pagina ${pageData.currentPage}`}>
+<Layout title={`Blog – pagina ${pageData.currentPage}`} canonical={pageUrl('/blog/', pageData.currentPage)}>
   <header class="page-heading">
     <p class="eyebrow">Educație relațională</p>
     <h1>Blog</h1>

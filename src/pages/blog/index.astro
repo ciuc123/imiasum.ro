@@ -3,14 +3,14 @@ import Layout from '../../layouts/Layout.astro';
 import PostList from '../../components/PostList.astro';
 import Pagination from '../../components/Pagination.astro';
 import { posts } from '../../data/posts.js';
-import { getPage } from '../../lib/content.js';
+import { getPage, pageUrl } from '../../lib/content.js';
 
 const pageData = getPage(posts, 1);
 // Prepare an encoded fallback search payload (safe to embed into client script)
 const FALLBACK_POSTS_ENCODED = encodeURIComponent(JSON.stringify(posts.map(p=>({slug:p.slug,title:p.title,excerpt:p.excerpt||'',content:p.content||'',date:p.date}))));
 ---
 
-<Layout title="Blog">
+<Layout title="Blog" canonical={pageUrl('/blog/', pageData.currentPage)}>
   <header class="page-heading">
     <p class="eyebrow">Educație relațională</p>
     <h1>Blog</h1>

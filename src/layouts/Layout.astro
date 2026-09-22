@@ -1,10 +1,11 @@
 ---
 import categories from '../data/categories.json';
 
-const {
+  const {
     title = 'Educație Relațională',
-    description = 'Educație Relațională'
-} = Astro.props;
+    description = 'Educație Relațională',
+    canonical = null
+  } = Astro.props;
 ---
 
 <html lang="ro">
@@ -14,7 +15,7 @@ const {
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="canonical" href={Astro.url.href} />
+    <link rel="canonical" href={canonical || Astro.url.href} />
     <link rel="stylesheet" href="/styles.css" />
 </head>
 
@@ -110,7 +111,7 @@ const {
         panel.classList.remove('open');
         btn.setAttribute('aria-expanded','false');
         // remove trap immediately
-        if (trapHandler) panel.removeEventListener('keydown', trapHandler);
+        try { if (trapHandler) panel.removeEventListener('keydown', trapHandler); } catch (err) { /* ignore */ }
         // after transition ends, hide panel to remove from accessibility tree
         const onEnd = (e)=>{
           if (e.target !== panel && !panel.contains(e.target)) return;
@@ -119,7 +120,13 @@ const {
           document.body.style.overflow = '';
           try { previouslyFocused && previouslyFocused.focus && previouslyFocused.focus(); } catch (err) { /* ignore */ }
         };
-        panel.addEventListener('transitionend', onEnd);
+        // If there's no CSS transition, transitionend may never fire. Add a
+        // timeout fallback to ensure the panel is hidden and body scroll is
+        // restored.
+        let timeoutId = null;
+        const clearFallback = ()=>{ if (timeoutId) { clearTimeout(timeoutId); timeoutId = null; } };
+        panel.addEventListener('transitionend', function te(e){ onEnd(e); clearFallback(); });
+        timeoutId = setTimeout(()=>{ try { onEnd({ target: panel }); } catch (_){}; clearFallback(); }, 350);
       }
 
       btn.addEventListener('click', function(){
