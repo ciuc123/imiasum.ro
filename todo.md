@@ -1,19 +1,51 @@
-# Updated: 2026-09-22
+# Todo — imiasum.ro Blog
 
-## ✅ Verified Complete
+Updated: 2026-09-22
 
-All items below have been verified working:
+## 🔴 Active Bugs
 
-- [x] **Mobile categories overlay**: Full-screen overlay + hamburger toggle + accessibility (focus trap, ESC close, backdrop close)
-- [x] **Post search**: Client-side on all blog pages (`/blog/`, `/blog/2/`, etc.) with pagination, fetches `/search-index.json` with FALLBACK_POSTS fallback
-- [x] **Post preview cards**: Shows 3 recent posts at end of each post (PostPreviewCards component)
-- [x] **Blog pagination**: Canonical URLs + rel="prev"/"rel="next" headers for SEO
-- [x] **Search pagination styling**: Consistent button styling (fixed 2026-09-22)
-- [x] **Remove unused CSS**: Removed `.mobile-category-menu` rule (fixed 2026-09-22)
-- [x] **Mobile menu close bug**: Fixed event listener race condition (2026-09-22) — cleared pending handlers on open, properly tracked transitionend listeners
-- [x] **Documentation**: Added "Adding a New Post" section to README with full workflow (2026-09-22)
-- [x] **Animation refinements**: Improved overlay animations with better easing curves, shadow animations, and smooth transitions (2026-09-22)
-- [x] **Search box UX**: Added focus states, hover effects, smooth transitions for better interactivity (2026-09-22)
+- [x] **Restore & improve mobile hamburger menu** — Blog + Categories on mobile only (FIXED 2026-09-22)
+  - Mobile hamburger: hidden on desktop, visible on mobile
+  - Mobile menu contains: Blog link + all Categories
+  - Desktop: Title + "Blog" link in header; categories in right sidebar
+  - No categories in header on desktop
+  - Organized menu: "Navigare" (Blog) + "Categorii" section
+  - Full accessibility: focus trap, ESC close, backdrop close
+  - **Changes**: `src/layouts/Layout.astro`, `public/styles.css`
+
+## 🎨 High Priority: Modernize Blog UX
+
+The current blog feels inconsistent and confusing. Search visibility, pagination behavior, and overall layout need modernization.
+
+### Current Issues:
+- Search box only appears on `/blog/` and paginated blog pages, not visible on category pages or single posts
+- Pagination shows on blog index but disappears on search results or category listings  
+- Search results feel disconnected from browsing — no context about current page
+- Mobile layout feels cramped with categories + limited space
+- Blog structure lacks clear visual hierarchy and consistent spacing
+- No visual feedback for current location (active category/page)
+
+### Desired Behavior:
+A modern, consistent blog UX where:
+1. **Search is always visible and prominent** — sticky or persistent search bar across all pages (blog index, categories, search results)
+2. **Pagination is consistent** — same visual treatment everywhere (blog, categories, search results)
+3. **Current context is clear** — highlight active category, show breadcrumbs or "You're viewing posts from: Category Name"
+4. **Visual hierarchy is strong** — clear sections, generous spacing, modern typography
+5. **Mobile is clean** — remove unnecessary chrome, optimize for reading
+6. **Blog feels like a unified space** — not disconnected pages, but a cohesive reading experience
+
+### Implementation Scope:
+- Add search bar to category pages (`src/pages/category/[slug].astro`, `src/pages/category/[slug]/[page].astro`)
+- Make pagination consistently styled across all listings
+- Add context headers for category/search result pages
+- Refactor mobile layout for clarity
+- Update CSS for modern spacing and typography (consider using CSS Grid for better layout control)
+- Add visual indicators for current page/category
+- Consider sticky search header for mobile (vs hamburger overlay)
+
+**Status**: Not started — needs design review before implementation
+
+---
 
 ## 📋 Medium Priority (Testing & Validation)
 
@@ -24,5 +56,7 @@ All items below have been verified working:
 
 - [ ] **Improve search ranking** (title/excerpt weight, term highlighting)
 
-See `done.md` for full project history and archived checklist.
+---
+
+See `done.md` for completed features and project history.
 

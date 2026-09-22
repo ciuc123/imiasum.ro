@@ -22,30 +22,33 @@ import categories from '../data/categories.json';
 <body>
 <header class="site-header">
     <a class="site-title" href="/">Educație Relațională</a>
-    <div class="site-navigation">
-        <nav class="primary-nav" aria-label="Navigare principală">
-            <a href="/blog/">Blog</a>
-        </nav>
-        <!-- Mobile hamburger toggle + full-screen overlay -->
-        <button class="mobile-category-toggle" aria-expanded="false" aria-controls="mobile-category-panel">
-            <span class="hamburger" aria-hidden="true">
-                <span></span>
-                <span></span>
-                <span></span>
-            </span>
-            <span class="visually-hidden">Categorii</span>
-        </button>
+    <nav class="primary-nav" aria-label="Navigare principală">
+        <a href="/blog/">Blog</a>
+    </nav>
 
-        <div id="mobile-category-panel" class="mobile-category-panel" role="dialog" aria-modal="true" hidden>
-            <div class="mobile-category-panel-inner">
-                <header class="mobile-category-panel-header">
-                    <h2>Categorii</h2>
-                    <button class="mobile-category-close" aria-label="Close categories">✕</button>
-                </header>
-                <nav class="category-nav" aria-label="Categorii">
-                    {categories.map((category) => <a href={`/category/${category.slug}/`}>{category.name}</a>)}
-                </nav>
-            </div>
+    <!-- Mobile hamburger toggle for Blog + Categories -->
+    <button class="mobile-nav-toggle" aria-expanded="false" aria-controls="mobile-nav-panel">
+        <span class="hamburger" aria-hidden="true">
+            <span></span>
+            <span></span>
+            <span></span>
+        </span>
+        <span class="visually-hidden">Meniu</span>
+    </button>
+
+    <div id="mobile-nav-panel" class="mobile-nav-panel" role="dialog" aria-modal="true" hidden>
+        <div class="mobile-nav-panel-inner">
+            <header class="mobile-nav-panel-header">
+                <h2>Navigare</h2>
+                <button class="mobile-nav-close" aria-label="Închide meniu">✕</button>
+            </header>
+            <nav class="nav-section" aria-label="Secțiuni principale">
+                <a href="/blog/" class="nav-section-link">Blog</a>
+            </nav>
+            <nav class="nav-section" aria-label="Categorii">
+                <h3 class="nav-section-title">Categorii</h3>
+                {categories.map((category) => <a href={`/category/${category.slug}/`} class="nav-category-link">{category.name}</a>)}
+            </nav>
         </div>
     </div>
 </header>
@@ -64,77 +67,68 @@ import categories from '../data/categories.json';
 </div>
 
 <script>
-  // Toggle the mobile categories overlay with a top-to-bottom slide animation.
   (function(){
     try {
-      const btn = document.querySelector('.mobile-category-toggle');
-      const panel = document.getElementById('mobile-category-panel');
+      const btn = document.querySelector('.mobile-nav-toggle');
+      const panel = document.getElementById('mobile-nav-panel');
       if (!btn || !panel) return;
-      const closeBtn = panel.querySelector('.mobile-category-close');
+      const closeBtn = panel.querySelector('.mobile-nav-close');
 
-       let previouslyFocused = null;
-       let trapHandler = null;
-       let closeTimeoutId = null;
-       let closeTransitionHandler = null;
+      let previouslyFocused = null;
+      let trapHandler = null;
+      let closeTimeoutId = null;
+      let closeTransitionHandler = null;
 
-       function getFocusableElements(container){
-         return Array.from(container.querySelectorAll('a[href], button:not([disabled]), input, textarea, [tabindex]:not([tabindex="-1"])'))
-           .filter((el) => el.offsetWidth > 0 || el.offsetHeight > 0);
-       }
+      function getFocusableElements(container){
+        return Array.from(container.querySelectorAll('a[href], button:not([disabled]), input, textarea, [tabindex]:not([tabindex="-1"])'))
+          .filter((el) => el.offsetWidth > 0 || el.offsetHeight > 0);
+      }
 
-       function openPanel(){
-         previouslyFocused = document.activeElement;
-         // Clear any pending close handlers to prevent race conditions
-         if (closeTimeoutId) { clearTimeout(closeTimeoutId); closeTimeoutId = null; }
-         if (closeTransitionHandler) { panel.removeEventListener('transitionend', closeTransitionHandler); closeTransitionHandler = null; }
+      function openPanel(){
+        previouslyFocused = document.activeElement;
+        if (closeTimeoutId) { clearTimeout(closeTimeoutId); closeTimeoutId = null; }
+        if (closeTransitionHandler) { panel.removeEventListener('transitionend', closeTransitionHandler); closeTransitionHandler = null; }
 
-         panel.removeAttribute('hidden');
-         requestAnimationFrame(()=> panel.classList.add('open'));
-         btn.setAttribute('aria-expanded','true');
-         document.body.style.overflow = 'hidden';
+        panel.removeAttribute('hidden');
+        requestAnimationFrame(()=> panel.classList.add('open'));
+        btn.setAttribute('aria-expanded','true');
+        document.body.style.overflow = 'hidden';
 
-         // focus first focusable item (close button or first link)
-         const focusable = getFocusableElements(panel);
-         if (focusable.length) focusable[0].focus();
+        const focusable = getFocusableElements(panel);
+        if (focusable.length) focusable[0].focus();
 
-         // trap Tab within the panel
-         trapHandler = function(e){
-           if (e.key !== 'Tab') return;
-           const nodes = getFocusableElements(panel);
-           if (!nodes.length) return;
-           const first = nodes[0];
-           const last = nodes[nodes.length - 1];
-           if (e.shiftKey && document.activeElement === first){
-             e.preventDefault(); last.focus();
-           } else if (!e.shiftKey && document.activeElement === last){
-             e.preventDefault(); first.focus();
-           }
-         };
-         panel.addEventListener('keydown', trapHandler);
-       }
+        trapHandler = function(e){
+          if (e.key !== 'Tab') return;
+          const nodes = getFocusableElements(panel);
+          if (!nodes.length) return;
+          const first = nodes[0];
+          const last = nodes[nodes.length - 1];
+          if (e.shiftKey && document.activeElement === first){
+            e.preventDefault(); last.focus();
+          } else if (!e.shiftKey && document.activeElement === last){
+            e.preventDefault(); first.focus();
+          }
+        };
+        panel.addEventListener('keydown', trapHandler);
+      }
 
-       function closePanel(){
-         panel.classList.remove('open');
-         btn.setAttribute('aria-expanded','false');
-         // remove trap immediately
-         try { if (trapHandler) panel.removeEventListener('keydown', trapHandler); } catch (err) { /* ignore */ }
-         // after transition ends, hide panel to remove from accessibility tree
-         const onEnd = (e)=>{
-           if (e.target !== panel && !panel.contains(e.target)) return;
-           panel.setAttribute('hidden','');
-           if (closeTransitionHandler) { panel.removeEventListener('transitionend', closeTransitionHandler); }
-           closeTransitionHandler = null;
-           document.body.style.overflow = '';
-           try { previouslyFocused && previouslyFocused.focus && previouslyFocused.focus(); } catch (err) { /* ignore */ }
-         };
-         // If there's no CSS transition, transitionend may never fire. Add a
-         // timeout fallback to ensure the panel is hidden and body scroll is
-         // restored.
-         const clearFallback = ()=>{ if (closeTimeoutId) { clearTimeout(closeTimeoutId); closeTimeoutId = null; } };
-         closeTransitionHandler = (e) => { onEnd(e); clearFallback(); };
-         panel.addEventListener('transitionend', closeTransitionHandler);
-         closeTimeoutId = setTimeout(()=>{ try { onEnd({ target: panel }); } catch (_){}; clearFallback(); }, 350);
-       }
+      function closePanel(){
+        panel.classList.remove('open');
+        btn.setAttribute('aria-expanded','false');
+        try { if (trapHandler) panel.removeEventListener('keydown', trapHandler); } catch (err) { /* ignore */ }
+        const onEnd = (e)=>{
+          if (e.target !== panel && !panel.contains(e.target)) return;
+          panel.setAttribute('hidden','');
+          if (closeTransitionHandler) { panel.removeEventListener('transitionend', closeTransitionHandler); }
+          closeTransitionHandler = null;
+          document.body.style.overflow = '';
+          try { previouslyFocused && previouslyFocused.focus && previouslyFocused.focus(); } catch (err) { /* ignore */ }
+        };
+        const clearFallback = ()=>{ if (closeTimeoutId) { clearTimeout(closeTimeoutId); closeTimeoutId = null; } };
+        closeTransitionHandler = (e) => { onEnd(e); clearFallback(); };
+        panel.addEventListener('transitionend', closeTransitionHandler);
+        closeTimeoutId = setTimeout(()=>{ try { onEnd({ target: panel }); } catch (_){}; clearFallback(); }, 350);
+      }
 
       btn.addEventListener('click', function(){
         if (panel.hasAttribute('hidden')) openPanel(); else closePanel();

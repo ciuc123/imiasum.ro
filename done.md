@@ -19,7 +19,29 @@ Verified all [x] completed items are working. Fixed several issues and improved 
 **Documentation:**
 - Added comprehensive "Adding a New Post" section to README with step-by-step workflow, data format requirements, and deployment instructions.
 
-**Status:** All major features complete and working (search, categories, pagination). Site ready for production use. Remaining tasks are testing and optional improvements.
+**Features Verified Complete (2026-09-22):**
+- [x] Mobile categories overlay: Full-screen overlay + hamburger toggle + accessibility (focus trap, ESC close, backdrop close)
+- [x] Post search: Client-side on all blog pages (`/blog/`, `/blog/2/`, etc.) with pagination
+- [x] Post preview cards: Shows 3 recent posts at end of each post
+- [x] Blog pagination: Canonical URLs + rel="prev"/"rel="next" headers for SEO
+- [x] Search pagination styling: Consistent button styling
+- [x] Mobile menu close bug: Fixed event listener race condition
+- [x] Documentation: "Adding a New Post" workflow in README
+- [x] Animation refinements: Improved overlay animations with modern easing
+- [x] Search box UX: Added focus states, hover effects, smooth transitions
+
+**Bugs Fixed (2026-09-22 final):**
+- [x] Mobile hamburger menu: Restored with proper layout
+  - Desktop: Title + "Blog" link only; categories on right sidebar; hamburger hidden
+  - Mobile: Hamburger button visible; click to access Blog link + all Categories
+  - Menu sections: "Navigare" (Blog) + "Categorii" (all category links)
+  - Full accessibility: focus trap, ESC close, backdrop close, Tab cycling
+  - Improved UX: categories NOT in desktop header, only in sidebar and mobile menu
+
+**Major Work Identified (Not Yet Started):**
+- Modernize Blog UX: Comprehensive redesign of blog structure to address search visibility, pagination consistency, context clarity, visual hierarchy, and unified reading experience
+
+**Status**: All major features complete. Mobile/desktop navigation properly separated.
 
 ---
 
