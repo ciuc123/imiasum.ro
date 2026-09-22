@@ -35,14 +35,13 @@ const FALLBACK_POSTS_JSON = JSON.stringify(posts.map(p=>({slug:p.slug,title:p.ti
 
   <!-- inject fallback posts JSON as a JS global before the module script -->
   <script set:html={
-    `const FALLBACK_POSTS = ${FALLBACK_POSTS_JSON};`
+    `window.FALLBACK_POSTS = ${FALLBACK_POSTS_JSON};`
   }></script>
 
-  <script type="module">
-    // Client-side search: try fetching a static search index first, fall back to inlined minimal posts
-    let POSTS = null;
-    // FALLBACK_POSTS_ENCODED is produced server-side in the frontmatter as an
-    // FALLBACK_POSTS is provided by the preceding inline script.
+   <script type="module">
+     // Client-side search: try fetching a static search index first, fall back to inlined minimal posts
+     let POSTS = null;
+     // FALLBACK_POSTS is provided by the preceding inline script.
 
     async function loadPostsIndex(){
       if (POSTS) return POSTS;

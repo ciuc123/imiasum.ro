@@ -44,7 +44,7 @@ const FALLBACK_POSTS_JSON = JSON.stringify(posts.map(p=>({slug:p.slug,title:p.ti
 
   <!-- inject fallback posts JSON as a JS global before the module script -->
   <script set:html={
-    `const FALLBACK_POSTS = ${FALLBACK_POSTS_JSON};`
+    `window.FALLBACK_POSTS = ${FALLBACK_POSTS_JSON};`
   }></script>
 
   <script type="module">
