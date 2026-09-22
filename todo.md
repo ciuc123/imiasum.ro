@@ -22,9 +22,8 @@ Remaining / follow-up tasks discovered while auditing the blog implementation:
 - [ ] Verify images/media on production environment (CDN / Pages asset paths).
 - [ ] add subtle open/close animation refinements for the overlay (timing/easing tweaks).
 - [ ] Optional: improve search ranking (title/excerpt weight, highlighting matches).
+- [ ] make it easy to add a new post. make sure everything works when adding it. include it in readme
 
-Future ideas
-- [ ] Add server-side or worker-based search if dataset grows (e.g., Lunr/miniSearch or Cloudflare Worker index).
 
 See `done.md` for the full archived checklist and notes.
 

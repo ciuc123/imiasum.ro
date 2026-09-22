@@ -16,7 +16,10 @@ export function getStaticPaths() {
 const { page } = Astro.props;
 const pageData = getPage(posts, page);
 // Prepare an encoded fallback search payload (safe to embed into client script)
-const FALLBACK_POSTS_ENCODED = encodeURIComponent(JSON.stringify(posts.map(p=>({slug:p.slug,title:p.title,excerpt:p.excerpt||'',content:p.content||'',date:p.date}))));
+// Prepare a small precomputed posts payload as a JSON string for safe
+// injection into inline scripts. We keep it as JSON here and inject using
+// set:html to avoid parser/interpolation issues inside <script> content.
+const FALLBACK_POSTS_JSON = JSON.stringify(posts.map(p=>({slug:p.slug,title:p.title,excerpt:p.excerpt||'',content:p.content||'',date:p.date})));
 ---
 
 <Layout title={`Blog – pagina ${pageData.currentPage}`} canonical={pageUrl('/blog/', pageData.currentPage)}>
@@ -40,14 +43,15 @@ const FALLBACK_POSTS_ENCODED = encodeURIComponent(JSON.stringify(posts.map(p=>({
     <Pagination basePath="/blog/" {...pageData} />
   </div>
 
+  <!-- inject fallback posts JSON as a JS global before the module script -->
+  <script set:html={
+    `const FALLBACK_POSTS = ${FALLBACK_POSTS_JSON};`
+  }></script>
+
   <script type="module">
     // reuse same client-side search logic as the main blog page
     let POSTS = null;
-    // FALLBACK_POSTS_ENCODED is produced server-side in the frontmatter as an
-    // encoded string. Inject it into the client script via a normal template
-    // literal (no extra backticks) so decodeURIComponent receives the exact
-    // percent-encoded payload.
-    const FALLBACK_POSTS = JSON.parse(decodeURIComponent(`${FALLBACK_POSTS_ENCODED}`));
+    // FALLBACK_POSTS is provided by the preceding inline script.
 
     async function loadPostsIndex(){
       if (POSTS) return POSTS;
