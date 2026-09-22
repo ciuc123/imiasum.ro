@@ -25,7 +25,11 @@ const visiblePages = getPaginationPages(currentPage, totalPages);
 ---
 
 {totalPages > 1 && <nav class="pagination" aria-label="Paginare">
-  {previousUrl ? <a href={previousUrl} rel="prev" aria-label="Pagina anterioară">← Anterior</a> : <span class="pagination-disabled" aria-hidden="true">← Anterior</span>}
+  <div class="pagination-nav-wrapper">
+    {previousUrl ? <a href={previousUrl} rel="prev" aria-label="Pagina anterioară">← Anterior</a> : <span class="pagination-disabled" aria-hidden="true">← Anterior</span>}
+    <span class="pagination-info">Pagina {currentPage} din {totalPages}</span>
+    {nextUrl ? <a href={nextUrl} rel="next" aria-label="Pagina următoare">Următor →</a> : <span class="pagination-disabled" aria-hidden="true">Următor →</span>}
+  </div>
   <div class="pagination-pages">
     {visiblePages.map((page, index) => {
       const prevPage = index > 0 ? visiblePages[index - 1] : 0;
@@ -40,5 +44,4 @@ const visiblePages = getPaginationPages(currentPage, totalPages);
       );
     })}
   </div>
-  {nextUrl ? <a href={nextUrl} rel="next" aria-label="Pagina următoare">Următor →</a> : <span class="pagination-disabled" aria-hidden="true">Următor →</span>}
 </nav>}

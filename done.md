@@ -91,6 +91,14 @@ Verified all [x] completed items are working. Fixed several issues and improved 
   - Success message shows count: "S-au găsit X rezultate:"
   - Clean UX: user knows exactly what they're viewing
 
+- [x] **Mobile pagination redesigned** (2026-09-22)
+  - Beautiful stacked layout on mobile
+  - Row 1: "← Anterior  Pagina 5 de 17  Următor →" (centered)
+  - Row 2: "[1 2 3 … 5 6]" (centered below)
+  - Bigger touch targets: `.5rem .65rem` padding
+  - Desktop unchanged: horizontal layout as before
+  - Improved UX: users know exactly which page they're on
+
 ---
 
 ## Summary of confirmations made during archive:

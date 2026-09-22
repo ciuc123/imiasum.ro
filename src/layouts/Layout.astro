@@ -306,6 +306,25 @@ import { posts } from '../data/posts.js';
         pager.className = 'pagination';
         pager.setAttribute('aria-label', 'Paginare rezultate');
 
+        // Navigation wrapper (for mobile stacking)
+        const navWrapper = document.createElement('div');
+        navWrapper.className = 'pagination-nav-wrapper';
+
+        // Helper function to get smart page range
+        function getVisiblePages(current, total) {
+          const pages = new Set();
+          const range = 3;
+          // First 3
+          for (let i = 1; i <= Math.min(3, total); i++) pages.add(i);
+          // Last 3
+          for (let i = Math.max(1, total - 2); i <= total; i++) pages.add(i);
+          // Around current
+          for (let i = Math.max(1, current - range); i <= Math.min(total, current + range); i++) pages.add(i);
+          return Array.from(pages).sort((a, b) => a - b);
+        }
+
+        const visiblePages = getVisiblePages(page, totalPages);
+
         // Previous button
         if (page > 1) {
           const prev = document.createElement('a');
@@ -316,37 +335,19 @@ import { posts } from '../data/posts.js';
             displaySearchResults(allResults, page - 1);
             resultsEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
           });
-          pager.appendChild(prev);
+          navWrapper.appendChild(prev);
         } else {
           const span = document.createElement('span');
           span.className = 'pagination-disabled';
           span.textContent = '← Anterior';
-          pager.appendChild(span);
+          navWrapper.appendChild(span);
         }
 
-        // Page numbers
-        const pages = document.createElement('div');
-        pages.className = 'pagination-pages';
-        for (let i = 1; i <= totalPages; i++) {
-          if (i === page) {
-            const span = document.createElement('span');
-            span.className = 'pagination-current';
-            span.setAttribute('aria-current', 'page');
-            span.textContent = String(i);
-            pages.appendChild(span);
-          } else {
-            const link = document.createElement('a');
-            link.href = '#';
-            link.textContent = String(i);
-            link.addEventListener('click', (e) => {
-              e.preventDefault();
-              displaySearchResults(allResults, i);
-              resultsEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            });
-            pages.appendChild(link);
-          }
-        }
-        pager.appendChild(pages);
+        // Page info
+        const info = document.createElement('span');
+        info.className = 'pagination-info';
+        info.textContent = `Pagina ${page} din ${totalPages}`;
+        navWrapper.appendChild(info);
 
         // Next button
         if (page < totalPages) {
@@ -358,13 +359,51 @@ import { posts } from '../data/posts.js';
             displaySearchResults(allResults, page + 1);
             resultsEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
           });
-          pager.appendChild(next);
+          navWrapper.appendChild(next);
         } else {
           const span = document.createElement('span');
           span.className = 'pagination-disabled';
           span.textContent = 'Următor →';
-          pager.appendChild(span);
+          navWrapper.appendChild(span);
         }
+
+        pager.appendChild(navWrapper);
+
+        // Page numbers with ellipsis
+        const pages = document.createElement('div');
+        pages.className = 'pagination-pages';
+        
+        visiblePages.forEach((pageNum, index) => {
+          const prevPage = index > 0 ? visiblePages[index - 1] : 0;
+          const showEllipsis = pageNum - prevPage > 1;
+          
+          if (showEllipsis) {
+            const ellipsis = document.createElement('span');
+            ellipsis.className = 'pagination-ellipsis';
+            ellipsis.textContent = '…';
+            pages.appendChild(ellipsis);
+          }
+          
+          if (pageNum === page) {
+            const span = document.createElement('span');
+            span.className = 'pagination-current';
+            span.setAttribute('aria-current', 'page');
+            span.textContent = String(pageNum);
+            pages.appendChild(span);
+          } else {
+            const link = document.createElement('a');
+            link.href = '#';
+            link.textContent = String(pageNum);
+            link.addEventListener('click', (e) => {
+              e.preventDefault();
+              displaySearchResults(allResults, pageNum);
+              resultsEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+            pages.appendChild(link);
+          }
+        });
+        pager.appendChild(pages);
+
 
         resultsEl.appendChild(pager);
       }

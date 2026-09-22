@@ -38,6 +38,15 @@ Updated: 2026-09-22
   - Success message shows count of results found
   - Main page content hidden while viewing search results
   - Clear search input to return to normal page view
+  - **Smart pagination applied**: Shows 1 2 3 … 15 16 17 (same as blog)
+
+- [x] **Mobile pagination redesigned** (FIXED 2026-09-22)
+  - Desktop: `← Anterior [1 2 3 … 5 6] Următor →` (horizontal)
+  - Mobile: Stacked layout with page info in middle
+    - Row 1: `← Anterior  Pagina 5 de 17  Următor →` (centered)
+    - Row 2: `[1 2 3 … 5 6]` (centered below)
+  - Bigger touch targets on mobile
+  - Clean, professional appearance
 
 ---
 
