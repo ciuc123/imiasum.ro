@@ -6,7 +6,6 @@ import { posts } from '../../data/posts.js';
 import { getPage, pageUrl } from '../../lib/content.js';
 
 const pageData = getPage(posts, 1);
-const FALLBACK_POSTS_JSON = JSON.stringify(posts.map(p=>({slug:p.slug,title:p.title,excerpt:p.excerpt||'',content:p.content||'',date:p.date})));
 ---
 
 <Layout title="Blog" canonical={pageUrl('/blog/', pageData.currentPage)}>
@@ -17,94 +16,10 @@ const FALLBACK_POSTS_JSON = JSON.stringify(posts.map(p=>({slug:p.slug,title:p.ti
   </header>
   <div class="section-heading">
     <h2 class="section-title">Articole</h2>
-        <div class="search-box">
-          <input id="post-search-input" type="search" placeholder="Caută articole (minim 3 caractere)" aria-label="Caută articole" />
-          <button id="post-search-button">Caută</button>
-        </div>
   </div>
-
-  <div id="search-results" style="display:none"></div>
 
   <div id="blog-list">
     <PostList posts={pageData.items} showExcerpt />
     <Pagination basePath="/blog/" {...pageData} />
   </div>
-
-  <!-- inject fallback posts JSON as a JS global before the module script -->
-  <script set:html={
-    `window.FALLBACK_POSTS = ${FALLBACK_POSTS_JSON};`
-  }></script>
-
-   <script type="module">
-     // Client-side search: try fetching a static search index first, fall back to inlined minimal posts
-     let POSTS = null;
-     // FALLBACK_POSTS is provided by the preceding inline script.
-
-    async function loadPostsIndex(){
-      if (POSTS) return POSTS;
-      try {
-        const res = await fetch('/search-index.json');
-        if (res.ok) { POSTS = await res.json(); return POSTS; }
-      } catch(e) {
-        // ignore
-      }
-      POSTS = FALLBACK_POSTS;
-      return POSTS;
-    }
-
-    const input = document.getElementById('post-search-input');
-    const button = document.getElementById('post-search-button');
-    const resultsEl = document.getElementById('search-results');
-    const blogList = document.getElementById('blog-list');
-
-    const PER_PAGE = 10;
-    let currentResults = [];
-    let currentPage = 1;
-
-    function renderResultsPage(page){
-      resultsEl.innerHTML = '';
-      const start = (page-1)*PER_PAGE;
-      const pageItems = currentResults.slice(start, start+PER_PAGE);
-      if (pageItems.length === 0) {
-        resultsEl.innerHTML = '<p>Nu s-au găsit rezultate.</p>';
-        return;
-      }
-      const list = document.createElement('div');
-      list.className = 'post-list';
-      for (const p of pageItems){
-        const article = document.createElement('article');
-        article.className = 'post-card';
-        article.innerHTML = `<p class="post-meta"><time datetime="${p.date}">${p.date||''}</time></p><h2><a href="/${p.slug}/">${p.title}</a></h2>${p.excerpt?`<p class="post-excerpt">${p.excerpt}</p>`:''}`;
-        list.appendChild(article);
-      }
-      resultsEl.appendChild(list);
-
-      // pagination controls
-      const totalPages = Math.ceil(currentResults.length / PER_PAGE);
-      const pager = document.createElement('div');
-      pager.className = 'pagination';
-      if (currentPage > 1) {
-        const prev = document.createElement('button'); prev.textContent = '← Anterior'; prev.addEventListener('click', ()=>{ currentPage--; renderResultsPage(currentPage); }); pager.appendChild(prev);
-      } else { const span = document.createElement('span'); span.className='pagination-disabled'; span.textContent='← Anterior'; pager.appendChild(span); }
-      const pages = document.createElement('div'); pages.className = 'pagination-pages';
-      for (let i=1;i<=totalPages;i++){ const pbtn = document.createElement('button'); pbtn.textContent = String(i); if (i===currentPage) { pbtn.className='pagination-current'; } else { pbtn.addEventListener('click',(()=>{ const page=i; return ()=>{ currentPage=page; renderResultsPage(page); }; })()); } pages.appendChild(pbtn); }
-      pager.appendChild(pages);
-      if (currentPage < totalPages) { const next = document.createElement('button'); next.textContent='Următor →'; next.addEventListener('click', ()=>{ currentPage++; renderResultsPage(currentPage); }); pager.appendChild(next); } else { const span = document.createElement('span'); span.className='pagination-disabled'; span.textContent='Următor →'; pager.appendChild(span); }
-      resultsEl.appendChild(pager);
-    }
-
-    async function doSearch(){
-      const q = input.value.trim().toLowerCase();
-      if (q.length < 3) { resultsEl.style.display='none'; blogList.style.display='block'; return; }
-      await loadPostsIndex();
-      currentResults = POSTS.filter(p => (p.title||'').toLowerCase().includes(q) || (p.excerpt||'').toLowerCase().includes(q) || (p.content||'').toLowerCase().includes(q));
-      currentPage = 1;
-      blogList.style.display='none';
-      resultsEl.style.display='block';
-      renderResultsPage(1);
-    }
-
-    button.addEventListener('click', doSearch);
-    input.addEventListener('keydown', (e)=>{ if (e.key==='Enter') doSearch(); });
-  </script>
 </Layout>

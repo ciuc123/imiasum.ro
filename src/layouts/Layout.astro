@@ -1,11 +1,14 @@
 ---
 import categories from '../data/categories.json';
+import { posts } from '../data/posts.js';
 
   const {
     title = 'Educație Relațională',
     description = 'Educație Relațională',
     canonical = null
   } = Astro.props;
+
+  const FALLBACK_POSTS_JSON = JSON.stringify(posts.map(p=>({slug:p.slug,title:p.title,excerpt:p.excerpt||'',content:p.content||'',date:p.date})));
 ---
 
 <html lang="ro">
@@ -22,6 +25,14 @@ import categories from '../data/categories.json';
 <body>
 <header class="site-header">
     <a class="site-title" href="/">Educație Relațională</a>
+
+    <div class="header-search-desktop">
+        <div class="search-box">
+            <input id="global-search-input" type="search" placeholder="Caută articole..." aria-label="Caută articole" />
+            <button id="global-search-button">Caută</button>
+        </div>
+    </div>
+
     <nav class="primary-nav" aria-label="Navigare principală">
         <a href="/blog/">Blog</a>
     </nav>
@@ -53,6 +64,14 @@ import categories from '../data/categories.json';
     </div>
 </header>
 
+<!-- Mobile search bar (sticky, below header) -->
+<div class="header-search-mobile">
+    <div class="search-box">
+        <input id="global-search-input-mobile" type="search" placeholder="Caută articole..." aria-label="Caută articole" />
+        <button id="global-search-button-mobile">Caută</button>
+    </div>
+</div>
+
 <div class="site-layout">
     <main>
         <slot />
@@ -66,6 +85,10 @@ import categories from '../data/categories.json';
     </aside>
 </div>
 
+<!-- Inject fallback posts JSON before the search module -->
+<script set:html={`window.FALLBACK_POSTS = ${FALLBACK_POSTS_JSON};`}></script>
+
+<!-- Hamburger menu functionality -->
 <script>
   (function(){
     try {
@@ -138,6 +161,71 @@ import categories from '../data/categories.json';
       panel.addEventListener('click', function(e){ if (e.target === panel) closePanel(); });
     } catch (err) { console.error(err); }
   })();
+</script>
+
+<script type="module">
+  // Global search across all pages
+  let POSTS = null;
+
+  async function loadPostsIndex(){
+    if (POSTS) return POSTS;
+    try {
+      const res = await fetch('/search-index.json');
+      if (res.ok) { POSTS = await res.json(); return POSTS; }
+    } catch(e) {}
+    POSTS = window.FALLBACK_POSTS || [];
+    return POSTS;
+  }
+
+  // Desktop search
+  const desktopInput = document.getElementById('global-search-input');
+  const desktopButton = document.getElementById('global-search-button');
+
+  // Mobile search
+  const mobileInput = document.getElementById('global-search-input-mobile');
+  const mobileButton = document.getElementById('global-search-button-mobile');
+
+  async function performSearch(query){
+    if (query.length < 3) return null;
+    await loadPostsIndex();
+    return POSTS.filter(p =>
+      (p.title||'').toLowerCase().includes(query) ||
+      (p.excerpt||'').toLowerCase().includes(query) ||
+      (p.content||'').toLowerCase().includes(query)
+    );
+  }
+
+  // Handle desktop search
+  if (desktopButton && desktopInput) {
+    desktopButton.addEventListener('click', async () => {
+      const q = desktopInput.value.trim().toLowerCase();
+      if (q.length < 3) return;
+      const results = await performSearch(q);
+      if (results && results.length > 0) {
+        // Navigate to first result
+        window.location.href = `/${results[0].slug}/`;
+      }
+    });
+    desktopInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') desktopButton.click();
+    });
+  }
+
+  // Handle mobile search
+  if (mobileButton && mobileInput) {
+    mobileButton.addEventListener('click', async () => {
+      const q = mobileInput.value.trim().toLowerCase();
+      if (q.length < 3) return;
+      const results = await performSearch(q);
+      if (results && results.length > 0) {
+        // Navigate to first result
+        window.location.href = `/${results[0].slug}/`;
+      }
+    });
+    mobileInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') mobileButton.click();
+    });
+  }
 </script>
 
 </body>

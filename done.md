@@ -30,6 +30,15 @@ Verified all [x] completed items are working. Fixed several issues and improved 
 - [x] Animation refinements: Improved overlay animations with modern easing
 - [x] Search box UX: Added focus states, hover effects, smooth transitions
 
+**Features Implemented (2026-09-22 final):**
+- [x] Search bar moved to global header (visible on ALL pages)
+  - Desktop: Centered search box in header between title and Blog link
+  - Mobile: Sticky search bar as second row below header (position: sticky)
+  - Searches all posts (title, excerpt, content)
+  - Navigates to first result on Enter or button click
+  - Removed redundant search from individual blog pages
+  - **Changes**: `src/layouts/Layout.astro`, `public/styles.css`, `src/pages/blog/index.astro`, `src/pages/blog/[page].astro`
+
 **Bugs Fixed (2026-09-22 final):**
 - [x] Mobile hamburger menu: Restored with proper layout
   - Desktop: Title + "Blog" link only; categories on right sidebar; hamburger hidden
@@ -41,7 +50,7 @@ Verified all [x] completed items are working. Fixed several issues and improved 
 **Major Work Identified (Not Yet Started):**
 - Modernize Blog UX: Comprehensive redesign of blog structure to address search visibility, pagination consistency, context clarity, visual hierarchy, and unified reading experience
 
-**Status**: All major features complete. Mobile/desktop navigation properly separated.
+**Status**: Major UX improvement complete - search now global and visible everywhere. Site has cohesive navigation and search experience.
 
 ---
 

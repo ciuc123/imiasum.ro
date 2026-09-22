@@ -2,16 +2,15 @@
 
 Updated: 2026-09-22
 
-## 🔴 Active Bugs
+## ✅ Completed (2026-09-22)
 
-- [x] **Restore & improve mobile hamburger menu** — Blog + Categories on mobile only (FIXED 2026-09-22)
-  - Mobile hamburger: hidden on desktop, visible on mobile
-  - Mobile menu contains: Blog link + all Categories
-  - Desktop: Title + "Blog" link in header; categories in right sidebar
-  - No categories in header on desktop
-  - Organized menu: "Navigare" (Blog) + "Categorii" section
-  - Full accessibility: focus trap, ESC close, backdrop close
-  - **Changes**: `src/layouts/Layout.astro`, `public/styles.css`
+- [x] **Move search bar to header** — Visible on all pages everywhere
+  - Desktop: Centered in header (professional placement)
+  - Mobile: Sticky bar below header (always accessible)
+  - Removed redundant search from blog pages
+  - Global search across all posts
+
+---
 
 ## 🎨 High Priority: Modernize Blog UX
 
