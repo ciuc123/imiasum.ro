@@ -34,7 +34,11 @@ const FALLBACK_POSTS_ENCODED = encodeURIComponent(JSON.stringify(posts.map(p=>({
   <script type="module">
     // Client-side search: try fetching a static search index first, fall back to inlined minimal posts
     let POSTS = null;
-    const FALLBACK_POSTS = JSON.parse(decodeURIComponent(`\`${FALLBACK_POSTS_ENCODED}\``));
+    // FALLBACK_POSTS_ENCODED is produced server-side in the frontmatter as an
+    // encoded string. Inject it into the client script via a normal template
+    // literal (no extra backticks) so decodeURIComponent receives the exact
+    // percent-encoded payload.
+    const FALLBACK_POSTS = JSON.parse(decodeURIComponent(`${FALLBACK_POSTS_ENCODED}`));
 
     async function loadPostsIndex(){
       if (POSTS) return POSTS;
