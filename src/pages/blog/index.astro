@@ -8,16 +8,7 @@ import { getPage, pageUrl } from '../../lib/content.js';
 const pageData = getPage(posts, 1);
 ---
 
-<Layout title="Blog" canonical={pageUrl('/blog/', pageData.currentPage)}>
-  <header class="page-heading">
-    <p class="eyebrow">Educație relațională</p>
-    <h1>Blog</h1>
-    <p>Idei despre relații, cuplu, emoții și dezvoltare personală.</p>
-  </header>
-  <div class="section-heading">
-    <h2 class="section-title">Articole</h2>
-  </div>
-
+<Layout title="Toate postarile" canonical={pageUrl('/blog/', pageData.currentPage)}>
   <div id="blog-list">
     <PostList posts={pageData.items} showExcerpt />
     <Pagination basePath="/blog/" {...pageData} />

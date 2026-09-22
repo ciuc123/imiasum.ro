@@ -10,6 +10,23 @@ Updated: 2026-09-22
   - Removed redundant search from blog pages
   - Global search across all posts
 
+- [x] **Update pagination** — Show smart range instead of all pages (IMPLEMENTED 2026-09-22)
+  - Shows: first 3 pages, last 3 pages, and 3 pages around current page
+  - Uses ellipsis (…) for gaps between ranges
+  - Example: 1 2 3 … 15 16 17
+  - Much cleaner on pages with many posts
+
+- [x] **Rename Blog navigation** — Changed to "Toate postarile" (All posts)
+  - Updated header link in desktop nav
+  - Updated mobile menu link
+  - Updated page titles
+
+- [x] **Simplify blog listing pages** — Removed redundant header (IMPLEMENTED 2026-09-22)
+  - Removed "Educație relațională" / "Blog" / description header from blog pages
+  - Posts now display immediately after navigation/search
+  - Cleaner, less cluttered appearance
+  - Applies to /blog/ and /blog/{page}/
+
 ---
 
 ## 🎨 High Priority: Modernize Blog UX

@@ -3,14 +3,42 @@ import { pageUrl } from '../lib/content.js';
 const { basePath, currentPage, totalPages } = Astro.props;
 const previousUrl = currentPage > 1 ? pageUrl(basePath, currentPage - 1) : null;
 const nextUrl = currentPage < totalPages ? pageUrl(basePath, currentPage + 1) : null;
+
+// Generate smart pagination: show first 3, last 3, and 3 around current
+function getPaginationPages(current, total) {
+  const pages = new Set();
+  const range = 3; // pages on each side of current
+
+  // Always show first 3 pages
+  for (let i = 1; i <= Math.min(3, total); i++) pages.add(i);
+
+  // Always show last 3 pages
+  for (let i = Math.max(1, total - 2); i <= total; i++) pages.add(i);
+
+  // Show range around current page
+  for (let i = Math.max(1, current - range); i <= Math.min(total, current + range); i++) pages.add(i);
+
+  return Array.from(pages).sort((a, b) => a - b);
+}
+
+const visiblePages = getPaginationPages(currentPage, totalPages);
 ---
 
 {totalPages > 1 && <nav class="pagination" aria-label="Paginare">
   {previousUrl ? <a href={previousUrl} rel="prev" aria-label="Pagina anterioară">← Anterior</a> : <span class="pagination-disabled" aria-hidden="true">← Anterior</span>}
   <div class="pagination-pages">
-    {Array.from({ length: totalPages }, (_, index) => index + 1).map((page) => page === currentPage
-      ? <span class="pagination-current" aria-current="page">{page}</span>
-      : <a href={pageUrl(basePath, page)} aria-label={`Pagina ${page}`}>{page}</a>)}
+    {visiblePages.map((page, index) => {
+      const prevPage = index > 0 ? visiblePages[index - 1] : 0;
+      const showEllipsis = page - prevPage > 1;
+      return (
+        <>
+          {showEllipsis && <span class="pagination-ellipsis">…</span>}
+          {page === currentPage
+            ? <span class="pagination-current" aria-current="page">{page}</span>
+            : <a href={pageUrl(basePath, page)} aria-label={`Pagina ${page}`}>{page}</a>}
+        </>
+      );
+    })}
   </div>
   {nextUrl ? <a href={nextUrl} rel="next" aria-label="Pagina următoare">Următor →</a> : <span class="pagination-disabled" aria-hidden="true">Următor →</span>}
 </nav>}

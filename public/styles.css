@@ -37,6 +37,7 @@ main { min-width:0; padding:48px 0 64px; } h1,h2,h3,h4 { line-height:1.2; } h1 {
 .pagination a,.pagination button,.pagination-current,.pagination-disabled { padding:.45rem .65rem; } .pagination-pages { display:flex; flex-wrap:wrap; justify-content:center; gap:3px; }
 .pagination button { border:1px solid var(--line); border-radius:3px; background:#fff; color:var(--ink); cursor:pointer; }
 .pagination button:hover { background:var(--soft); }
+.pagination-ellipsis { padding:.45rem .35rem; color:var(--muted); }
 .pagination-current { border-radius:3px; color:#fff; background:var(--accent); } .pagination-disabled { color:#aaa; }
 @media (max-width:700px) {
   body { padding:0 16px; }
