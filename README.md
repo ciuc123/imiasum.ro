@@ -2,6 +2,36 @@
 
 Auto-generated site for imiasum.ciuculescu.com
 
+## Quick start — minimum commands
+
+Use the commands below as the minimal actions required to run the project in
+each environment.
+
+- Local development (hot-reload):
+
+```bash
+npm run dev
+```
+
+- Local production preview (build and serve the built `dist/`):
+
+```bash
+npm run build && npm run start
+```
+
+- Production (Cloudflare Pages or other static host):
+
+Set the build command to:
+
+```bash
+npm run build
+```
+
+The deployment platform will run `npm run build` and publish the generated
+`dist/` output. (No `npm run start` is required on the production host.)
+
+
+
 ## Scripts
 
 This repository includes a set of utility scripts (in `scripts/`) used to
