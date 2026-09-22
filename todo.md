@@ -24,7 +24,8 @@ Remaining / follow-up tasks discovered while auditing the blog implementation:
 - [ ] add subtle open/close animation refinements for the overlay (timing/easing tweaks).
 - [ ] Optional: improve search ranking (title/excerpt weight, highlighting matches).
 - [ ] make it easy to add a new post. make sure everything works when adding it. include it in readme
-
+- [ ] bugfix: when searching and results come in the pagination buttons switch their original appearance. Keep a single design. 
+- [ ] feature: add the search bar in every blog page (including search results)
 
 See `done.md` for the full archived checklist and notes.
 

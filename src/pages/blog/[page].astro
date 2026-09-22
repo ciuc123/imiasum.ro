@@ -15,9 +15,6 @@ export function getStaticPaths() {
 
 const { page } = Astro.props;
 const pageData = getPage(posts, page);
-// Prepare a small precomputed posts payload as a JSON string for safe
-// injection into inline scripts. We keep it as JSON here and inject using
-// set:html to avoid parser/interpolation issues inside <script> content.
 const FALLBACK_POSTS_JSON = JSON.stringify(posts.map(p=>({slug:p.slug,title:p.title,excerpt:p.excerpt||'',content:p.content||'',date:p.date})));
 ---
 
