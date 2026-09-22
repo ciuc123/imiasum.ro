@@ -14,6 +14,8 @@ Remaining / follow-up tasks discovered while auditing the blog implementation:
 - [ ] bugfix: /blog shows this in console: blog/:1 Uncaught ReferenceError: FALLBACK_POSTS_ENCODED is not defined
   at blog/:1:9818
 - [ ] bugfix: /blog search doesn't work
+- [ ] bugfix: remove old categories functionality from header. Also remove the ugly button that isn't used anymore.
+- [ ] bugfix: mobile categories menu sometimes closes by itself. I click on the hamburger, it opens, then at the end of the open animation it closes right back without any other input from my side.
 - [ ] Test blog pagination across multiple pages and verify canonical/rel-prev/rel-next headers if needed.
 - [ ] Test category pages and mobile category overlay on multiple devices and browsers.
  - [x] Test blog pagination across multiple pages and verify canonical/rel-prev/rel-next headers if needed. Implemented: added canonical URLs for paginated pages and verified `rel="prev"` / `rel="next"` are emitted by `Pagination.astro`. (2026-09-22)
