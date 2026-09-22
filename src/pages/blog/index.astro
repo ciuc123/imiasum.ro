@@ -6,7 +6,6 @@ import { posts } from '../../data/posts.js';
 import { getPage, pageUrl } from '../../lib/content.js';
 
 const pageData = getPage(posts, 1);
-// Prepare an encoded fallback search payload (safe to embed into client script)
 // Prepare a small precomputed posts payload as a JSON string for safe
 // injection into inline scripts. We keep it as JSON here and inject using
 // set:html to avoid parser/interpolation issues inside <script> content.
