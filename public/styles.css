@@ -43,6 +43,7 @@ main { min-width:0; padding:48px 0 64px; } h1,h2,h3,h4 { line-height:1.2; } h1 {
 .pagination-ellipsis { padding:.45rem .35rem; color:var(--muted); }
 .pagination-current { border-radius:3px; color:#fff; background:var(--accent); } .pagination-disabled { color:#aaa; }
 .pagination-info { color:var(--muted); font-size:.95rem; }
+@media (max-width:767px) {
   body { padding:0 16px; }
   header.site-header { padding:0; }
   .header-top { flex-direction:row; justify-content:space-between; align-items:center; gap:12px; padding:12px 0; }
