@@ -4,11 +4,24 @@
   "assets": {
     "directory": "./dist"
   },
-  "observability": {
-    "logs": {
-      "enabled": true,
-      "invocation_logs": true,
-      "persist": true
+  "routes": [
+    {
+      "pattern": "imiasum.ro",
+      "custom_domain": true
+    }
+  ],
+  "env": {
+    "dev": {
+      "name": "imiasum-ro-dev",
+      "assets": {
+        "directory": "./dist"
+      },
+      "routes": [
+        {
+          "pattern": "dev.imiasum.ro",
+          "custom_domain": true
+        }
+      ]
     }
   }
 }
