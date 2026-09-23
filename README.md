@@ -30,6 +30,13 @@ npm run build
 The deployment platform will run `npm run build` and publish the generated
 `dist/` output. (No `npm run start` is required on the production host.)
 
+- Cloudflare Workers deployment (using Wrangler):
+
+```bash
+npx wrangler deploy            # creates/updates imiasum-ro (production)
+npx wrangler deploy --env dev  # creates/updates imiasum-ro-dev (dev)
+```
+
 
 
 ## Scripts
