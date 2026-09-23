@@ -2,7 +2,7 @@
   "name": "imiasum-ro",
   "compatibility_date": "2026-09-18",
   "assets": {
-    "directory": "./dist"  // ← keep your existing assets directory
+    "directory": "./dist"
   },
   "routes": [
     {
@@ -13,6 +13,9 @@
   "env": {
     "dev": {
       "name": "imiasum-ro-dev",
+      "assets": {
+        "directory": "./dist"
+      },
       "routes": [
         {
           "pattern": "dev.imiasum.ro",
