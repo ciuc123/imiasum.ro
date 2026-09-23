@@ -2,13 +2,23 @@
   "name": "imiasum-ro",
   "compatibility_date": "2026-09-18",
   "assets": {
-    "directory": "./dist"
+    "directory": "./dist"  // ← keep your existing assets directory
   },
-  "observability": {
-    "logs": {
-      "enabled": true,
-      "invocation_logs": true,
-      "persist": true
+  "routes": [
+    {
+      "pattern": "imiasum.ro",
+      "custom_domain": true
+    }
+  ],
+  "env": {
+    "dev": {
+      "name": "imiasum-ro-dev",
+      "routes": [
+        {
+          "pattern": "dev.imiasum.ro",
+          "custom_domain": true
+        }
+      ]
     }
   }
 }
