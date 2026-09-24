@@ -1,52 +1,6 @@
 # Todo — imiasum.ro Blog
 
-Updated: 2026-09-22
-
-## ✅ Completed (2026-09-22)
-
-- [x] **Move search bar to header** — Visible on all pages everywhere
-  - Desktop: Centered in header (professional placement)
-  - Mobile: Sticky bar below header (always accessible)
-  - Removed redundant search from blog pages
-  - Global search across all posts
-
-- [x] **Update pagination** — Show smart range instead of all pages
-  - Shows: first 3 pages, last 3 pages, and 3 pages around current page
-  - Uses ellipsis (…) for gaps between ranges
-  - Example: 1 2 3 … 15 16 17
-
-- [x] **Rename Blog navigation** — Changed to "Toate postarile" (All posts)
-  - Updated header link in desktop nav
-  - Updated mobile menu link
-
-- [x] **Simplify blog listing pages** — Removed redundant header
-  - Removed "Educație relațională" / "Blog" / description header from blog pages
-  - Posts now display immediately after navigation/search
-
-- [x] **Fix mobile header** — Search bar fully visible + hide/show on scroll (IMPLEMENTED 2026-09-22)
-  - Mobile search bar now part of header (not separate sticky element)
-  - Header layout: Row 1 (Title | Hamburger), Row 2 (Search bar, full width)
-  - Header hides on scroll-down, shows on scroll-up for better UX
-  - Uses `transform: translateY(-100%)` for smooth animation
-
-- [x] **Fix global search results display** — Show list instead of single post (FIXED 2026-09-22)
-  - Search now displays results as a paginated list on the page
-  - Works on desktop and mobile
-  - Shows up to 10 results per page with pagination controls
-  - Click on a result to visit the full post
-  - Mobile search auto-scrolls to results
-  - Success message shows count of results found
-  - Main page content hidden while viewing search results
-  - Clear search input to return to normal page view
-  - **Smart pagination applied**: Shows 1 2 3 … 15 16 17 (same as blog)
-
-- [x] **Mobile pagination redesigned** (FIXED 2026-09-22)
-  - Desktop: `← Anterior [1 2 3 … 5 6] Următor →` (horizontal)
-  - Mobile: Stacked layout with page info in middle
-    - Row 1: `← Anterior  Pagina 5 de 17  Următor →` (centered)
-    - Row 2: `[1 2 3 … 5 6]` (centered below)
-  - Bigger touch targets on mobile
-  - Clean, professional appearance
+Updated: 2026-09-24
 
 ---
 
