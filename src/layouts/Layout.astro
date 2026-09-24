@@ -1,338 +1,524 @@
 ---
+import Breadcrumbs from '../components/Breadcrumbs.astro';
 import categories from '../data/categories.json';
 import { posts } from '../data/posts.js';
 
-  const {
-    title = 'Educație Relațională',
-    description = 'Educație Relațională',
-    canonical = null
-  } = Astro.props;
+const {
+  title = 'Educație Relațională',
+  description = 'Educație Relațională',
+  canonical = null,
+  breadcrumbs = [],
+  navSection = 'home',
+  currentCategorySlug = ''
+} = Astro.props;
 
-  const FALLBACK_POSTS_JSON = JSON.stringify(posts.map(p=>({slug:p.slug,title:p.title,excerpt:p.excerpt||'',content:p.content||'',date:p.date})));
+const pathname = Astro.url.pathname;
+const currentYear = new Date().getFullYear();
+const blogNavActive = navSection === 'blog';
+const blogListingActive = pathname.startsWith('/blog/');
+const FALLBACK_POSTS_JSON = JSON.stringify(
+  posts.map((post) => ({
+    slug: post.slug,
+    title: post.title,
+    excerpt: post.excerpt || '',
+    content: post.content || '',
+    date: post.date,
+    categories: post.categories || []
+  }))
+);
 ---
 
-<html lang="ro">
+<html lang="ro" class="theme-purple">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{title}</title>
-    <meta name="description" content={description} />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="canonical" href={canonical || Astro.url.href} />
-    <link rel="stylesheet" href="/styles.css" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <meta name="theme-color" content="#7a3b63" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="canonical" href={canonical || Astro.url.href} />
+  <link rel="stylesheet" href="/styles.css" />
+  <script is:inline>
+    try {
+      const savedTheme = localStorage.getItem('site-theme');
+      const initialTheme = savedTheme === 'theme-blue' ? 'theme-blue' : 'theme-purple';
+      document.documentElement.classList.remove('theme-blue', 'theme-purple');
+      document.documentElement.classList.add(initialTheme);
+    } catch (error) {
+      document.documentElement.classList.add('theme-purple');
+    }
+  </script>
 </head>
 
 <body>
-<header class="site-header" id="site-header">
-    <div class="header-top">
-        <a class="site-title" href="/">Educație Relațională</a>
+  <header class="site-header" id="site-header">
+    <div class="header-shell">
+      <div class="header-top">
+        <div class="site-brand">
+          <a class="site-title" href="/">Educație Relațională</a>
+          <p class="site-subtitle">Articole care pun claritatea, ritmul și lectura pe primul loc.</p>
+        </div>
 
         <div class="header-search-desktop">
-            <div class="search-box">
-                <input id="global-search-input" type="search" placeholder="Caută articole..." aria-label="Caută articole" />
-                <button id="global-search-button">Caută</button>
-            </div>
+          <div class="search-box search-box-elevated">
+            <input id="global-search-input" type="search" placeholder="Caută articole, teme sau idei..." aria-label="Caută articole" />
+            <button id="global-search-button" type="button">Caută</button>
+          </div>
         </div>
 
-        <nav class="primary-nav" aria-label="Navigare principală">
-            <a href="/blog/">Toate postarile</a>
-        </nav>
+        <div class="header-actions">
+          <nav class="primary-nav" aria-label="Navigare principală">
+            <a href="/blog/" class={blogNavActive ? 'is-active' : undefined} aria-current={blogListingActive ? 'page' : undefined}>Toate postările</a>
+          </nav>
 
-        <!-- Mobile hamburger toggle for Blog + Categories -->
-        <button class="mobile-nav-toggle" aria-expanded="false" aria-controls="mobile-nav-panel">
+          <div class="theme-switcher" aria-label="Schimbă tema vizuală">
+            <button type="button" class="theme-switcher-button" data-theme-toggle="theme-blue" aria-pressed="false">Blue</button>
+            <button type="button" class="theme-switcher-button" data-theme-toggle="theme-purple" aria-pressed="true">Purple</button>
+          </div>
+
+          <button class="mobile-nav-toggle" type="button" aria-expanded="false" aria-controls="mobile-nav-panel">
             <span class="hamburger" aria-hidden="true">
-                <span></span>
-                <span></span>
-                <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
             </span>
             <span class="visually-hidden">Meniu</span>
-        </button>
-    </div>
-
-    <!-- Mobile search bar (inside header on mobile) -->
-    <div class="header-search-mobile">
-        <div class="search-box">
-            <input id="global-search-input-mobile" type="search" placeholder="Caută articole..." aria-label="Caută articole" />
-            <button id="global-search-button-mobile">Caută</button>
+          </button>
         </div>
+      </div>
+
+      <div class="header-search-mobile">
+        <div class="search-box search-box-elevated">
+          <input id="global-search-input-mobile" type="search" placeholder="Caută articole, teme sau idei..." aria-label="Caută articole" />
+          <button id="global-search-button-mobile" type="button">Caută</button>
+        </div>
+      </div>
     </div>
 
     <div id="mobile-nav-panel" class="mobile-nav-panel" role="dialog" aria-modal="true" hidden>
-        <div class="mobile-nav-panel-inner">
-            <header class="mobile-nav-panel-header">
-                <h2>Navigare</h2>
-                <button class="mobile-nav-close" aria-label="Închide meniu">✕</button>
-            </header>
-            <nav class="nav-section" aria-label="Secțiuni principale">
-                <a href="/blog/" class="nav-section-link">Toate postarile</a>
-            </nav>
-            <nav class="nav-section" aria-label="Categorii">
-                <h3 class="nav-section-title">Categorii</h3>
-                {categories.map((category) => <a href={`/category/${category.slug}/`} class="nav-category-link">{category.name}</a>)}
-            </nav>
+      <div class="mobile-nav-panel-inner">
+        <header class="mobile-nav-panel-header">
+          <div>
+            <p class="nav-section-title">Navigare</p>
+            <h2>Meniu</h2>
+          </div>
+          <button class="mobile-nav-close" type="button" aria-label="Închide meniu">✕</button>
+        </header>
+
+        <div class="mobile-nav-panel-content">
+          <div class="theme-switcher theme-switcher-mobile" aria-label="Schimbă tema vizuală">
+            <button type="button" class="theme-switcher-button" data-theme-toggle="theme-blue" aria-pressed="false">Blue</button>
+            <button type="button" class="theme-switcher-button" data-theme-toggle="theme-purple" aria-pressed="true">Purple</button>
+          </div>
+
+          <nav class="nav-section" aria-label="Secțiuni principale">
+            <a
+              href="/blog/"
+              class={blogListingActive ? 'nav-section-link is-active' : 'nav-section-link'}
+              aria-current={blogListingActive ? 'page' : undefined}
+            >
+              Toate postările
+            </a>
+          </nav>
+
+          <nav class="nav-section" aria-label="Categorii">
+            <h3 class="nav-section-title">Categorii</h3>
+            {categories.map((category) => (
+              <a
+                href={`/category/${category.slug}/`}
+                class={currentCategorySlug === category.slug ? 'nav-category-link is-active' : 'nav-category-link'}
+                aria-current={currentCategorySlug === category.slug ? 'page' : undefined}
+              >
+                {category.name}
+              </a>
+            ))}
+          </nav>
         </div>
+      </div>
     </div>
-</header>
+  </header>
 
-
-<div class="site-layout">
-    <main>
-        <!-- Global search results container -->
-        <div id="global-search-results" style="display:none;"></div>
-
-        <!-- Main page content -->
-        <div id="main-content">
+  <div class="site-frame">
+    <div class="site-layout">
+      <main>
+        <div class="content-stack">
+          <Breadcrumbs items={breadcrumbs} />
+          <div id="global-search-results" class="search-results-shell" style="display:none;"></div>
+          <div id="main-content">
             <slot />
+          </div>
         </div>
-    </main>
+      </main>
 
-    <aside class="category-sidebar" aria-labelledby="categories-heading">
-        <h2 id="categories-heading">Categorii</h2>
-        <nav aria-label="Categorii">
-            {categories.map((category) => <a href={`/category/${category.slug}/`}>{category.name}</a>)}
-        </nav>
-    </aside>
-</div>
+      <aside class="category-sidebar" aria-labelledby="categories-heading">
+        <div class="sidebar-card">
+          <p class="eyebrow sidebar-eyebrow">Context</p>
+          <h2 id="categories-heading">Navigare tematică</h2>
+          <p class="sidebar-description">Găsești mai repede ce te interesează dacă intri direct în categoria activă.</p>
+          <nav aria-label="Categorii" class="sidebar-nav">
+            <a
+              href="/blog/"
+              class={blogListingActive ? 'sidebar-link is-active' : 'sidebar-link'}
+              aria-current={blogListingActive ? 'page' : undefined}
+            >
+              Toate postările
+            </a>
+            {categories.map((category) => (
+              <a
+                href={`/category/${category.slug}/`}
+                class={currentCategorySlug === category.slug ? 'sidebar-link is-active' : 'sidebar-link'}
+                aria-current={currentCategorySlug === category.slug ? 'page' : undefined}
+              >
+                {category.name}
+              </a>
+            ))}
+          </nav>
+        </div>
+      </aside>
+    </div>
+  </div>
 
-<!-- Inject fallback posts JSON before the search module -->
-<script set:html={`window.FALLBACK_POSTS = ${FALLBACK_POSTS_JSON};`}></script>
+  <footer class="site-footer">
+    <p>Educație Relațională · arhivă editorială atent structurată · {currentYear}</p>
+  </footer>
 
-<!-- Header scroll behavior (hide/show on scroll) -->
-<script>
-  (function(){
-    const header = document.getElementById('site-header');
-    if (!header) return;
+  <script set:html={`window.FALLBACK_POSTS = ${FALLBACK_POSTS_JSON};`}></script>
 
-    let lastScrollY = 0;
-    let isHeaderHidden = false;
+  <script>
+    (function () {
+      const header = document.getElementById('site-header');
+      if (!header) return;
 
-    window.addEventListener('scroll', () => {
-      const currentScrollY = window.scrollY;
+      let lastScrollY = 0;
+      let isHeaderHidden = false;
 
-      // If scrolling down and past 50px, hide header
-      if (currentScrollY > lastScrollY && currentScrollY > 50 && !isHeaderHidden) {
-        header.classList.add('header-hidden');
-        isHeaderHidden = true;
-      }
-      // If scrolling up, show header
-      else if (currentScrollY < lastScrollY && isHeaderHidden) {
-        header.classList.remove('header-hidden');
-        isHeaderHidden = false;
-      }
+      window.addEventListener('scroll', () => {
+        const currentScrollY = window.scrollY;
 
-      lastScrollY = currentScrollY;
-    }, false);
-  })();
-</script>
-<script>
-  (function(){
-    try {
-      const btn = document.querySelector('.mobile-nav-toggle');
-      const panel = document.getElementById('mobile-nav-panel');
-      if (!btn || !panel) return;
-      const closeBtn = panel.querySelector('.mobile-nav-close');
+        if (currentScrollY > lastScrollY && currentScrollY > 50 && !isHeaderHidden) {
+          header.classList.add('header-hidden');
+          isHeaderHidden = true;
+        } else if (currentScrollY < lastScrollY && isHeaderHidden) {
+          header.classList.remove('header-hidden');
+          isHeaderHidden = false;
+        }
 
-      let previouslyFocused = null;
-      let trapHandler = null;
-      let closeTimeoutId = null;
-      let closeTransitionHandler = null;
+        lastScrollY = currentScrollY;
+      }, false);
+    })();
+  </script>
 
-      function getFocusableElements(container){
-        return Array.from(container.querySelectorAll('a[href], button:not([disabled]), input, textarea, [tabindex]:not([tabindex="-1"])'))
-          .filter((el) => el.offsetWidth > 0 || el.offsetHeight > 0);
-      }
+  <script>
+    (function () {
+      try {
+        const root = document.documentElement;
+        const themeButtons = Array.from(document.querySelectorAll('[data-theme-toggle]'));
+        if (!themeButtons.length) return;
 
-      function openPanel(){
-        previouslyFocused = document.activeElement;
-        if (closeTimeoutId) { clearTimeout(closeTimeoutId); closeTimeoutId = null; }
-        if (closeTransitionHandler) { panel.removeEventListener('transitionend', closeTransitionHandler); closeTransitionHandler = null; }
-
-        panel.removeAttribute('hidden');
-        requestAnimationFrame(()=> panel.classList.add('open'));
-        btn.setAttribute('aria-expanded','true');
-        document.body.style.overflow = 'hidden';
-
-        const focusable = getFocusableElements(panel);
-        if (focusable.length) focusable[0].focus();
-
-        trapHandler = function(e){
-          if (e.key !== 'Tab') return;
-          const nodes = getFocusableElements(panel);
-          if (!nodes.length) return;
-          const first = nodes[0];
-          const last = nodes[nodes.length - 1];
-          if (e.shiftKey && document.activeElement === first){
-            e.preventDefault(); last.focus();
-          } else if (!e.shiftKey && document.activeElement === last){
-            e.preventDefault(); first.focus();
+        function setTheme(theme) {
+          const nextTheme = theme === 'theme-blue' ? 'theme-blue' : 'theme-purple';
+          root.classList.remove('theme-blue', 'theme-purple');
+          root.classList.add(nextTheme);
+          try {
+            localStorage.setItem('site-theme', nextTheme);
+          } catch (err) {
+            // ignore
           }
-        };
-        panel.addEventListener('keydown', trapHandler);
+
+          themeButtons.forEach((button) => {
+            const isActive = button.getAttribute('data-theme-toggle') === nextTheme;
+            button.classList.toggle('is-active', isActive);
+            button.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+          });
+        }
+
+        const initialTheme = root.classList.contains('theme-blue') ? 'theme-blue' : 'theme-purple';
+        setTheme(initialTheme);
+
+        themeButtons.forEach((button) => {
+          button.addEventListener('click', () => setTheme(button.getAttribute('data-theme-toggle')));
+        });
+      } catch (err) {
+        console.error(err);
+      }
+    })();
+  </script>
+
+  <script>
+    (function () {
+      try {
+        const btn = document.querySelector('.mobile-nav-toggle');
+        const panel = document.getElementById('mobile-nav-panel');
+        if (!btn || !panel) return;
+        const closeBtn = panel.querySelector('.mobile-nav-close');
+
+        let previouslyFocused = null;
+        let trapHandler = null;
+        let closeTimeoutId = null;
+        let closeTransitionHandler = null;
+
+        function getFocusableElements(container) {
+          return Array.from(container.querySelectorAll('a[href], button:not([disabled]), input, textarea, [tabindex]:not([tabindex="-1"])'))
+            .filter((el) => el.offsetWidth > 0 || el.offsetHeight > 0);
+        }
+
+        function openPanel() {
+          previouslyFocused = document.activeElement;
+          if (closeTimeoutId) {
+            clearTimeout(closeTimeoutId);
+            closeTimeoutId = null;
+          }
+          if (closeTransitionHandler) {
+            panel.removeEventListener('transitionend', closeTransitionHandler);
+            closeTransitionHandler = null;
+          }
+
+          panel.removeAttribute('hidden');
+          requestAnimationFrame(() => panel.classList.add('open'));
+          btn.setAttribute('aria-expanded', 'true');
+          document.body.style.overflow = 'hidden';
+
+          const focusable = getFocusableElements(panel);
+          if (focusable.length) focusable[0].focus();
+
+          trapHandler = function (e) {
+            if (e.key !== 'Tab') return;
+            const nodes = getFocusableElements(panel);
+            if (!nodes.length) return;
+            const first = nodes[0];
+            const last = nodes[nodes.length - 1];
+            if (e.shiftKey && document.activeElement === first) {
+              e.preventDefault();
+              last.focus();
+            } else if (!e.shiftKey && document.activeElement === last) {
+              e.preventDefault();
+              first.focus();
+            }
+          };
+          panel.addEventListener('keydown', trapHandler);
+        }
+
+        function closePanel() {
+          panel.classList.remove('open');
+          btn.setAttribute('aria-expanded', 'false');
+          try {
+            if (trapHandler) panel.removeEventListener('keydown', trapHandler);
+          } catch (err) {
+            // ignore
+          }
+
+          const onEnd = (e) => {
+            if (e.target !== panel && !panel.contains(e.target)) return;
+            panel.setAttribute('hidden', '');
+            if (closeTransitionHandler) panel.removeEventListener('transitionend', closeTransitionHandler);
+            closeTransitionHandler = null;
+            document.body.style.overflow = '';
+            try {
+              previouslyFocused && previouslyFocused.focus && previouslyFocused.focus();
+            } catch (err) {
+              // ignore
+            }
+          };
+
+          const clearFallback = () => {
+            if (closeTimeoutId) {
+              clearTimeout(closeTimeoutId);
+              closeTimeoutId = null;
+            }
+          };
+
+          closeTransitionHandler = (e) => {
+            onEnd(e);
+            clearFallback();
+          };
+          panel.addEventListener('transitionend', closeTransitionHandler);
+          closeTimeoutId = setTimeout(() => {
+            try {
+              onEnd({ target: panel });
+            } catch (_) {
+              // ignore
+            }
+            clearFallback();
+          }, 350);
+        }
+
+        btn.addEventListener('click', function () {
+          if (panel.hasAttribute('hidden')) openPanel();
+          else closePanel();
+        });
+        if (closeBtn) closeBtn.addEventListener('click', closePanel);
+        panel.addEventListener('keydown', function (e) {
+          if (e.key === 'Escape') closePanel();
+        });
+        panel.addEventListener('click', function (e) {
+          if (e.target === panel) closePanel();
+        });
+      } catch (err) {
+        console.error(err);
+      }
+    })();
+  </script>
+
+  <script type="module">
+    let POSTS = null;
+    let currentSearchQuery = '';
+
+    const desktopInput = document.getElementById('global-search-input');
+    const desktopButton = document.getElementById('global-search-button');
+    const mobileInput = document.getElementById('global-search-input-mobile');
+    const mobileButton = document.getElementById('global-search-button-mobile');
+
+    async function loadPostsIndex() {
+      if (POSTS) return POSTS;
+      try {
+        const res = await fetch('/search-index.json');
+        if (res.ok) {
+          POSTS = await res.json();
+          return POSTS;
+        }
+      } catch (e) {
+        // fallback below
+      }
+      POSTS = window.FALLBACK_POSTS || [];
+      return POSTS;
+    }
+
+    function escapeHtml(value = '') {
+      return value
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#39;');
+    }
+
+    function syncSearchInputs(value) {
+      if (desktopInput && desktopInput.value !== value) desktopInput.value = value;
+      if (mobileInput && mobileInput.value !== value) mobileInput.value = value;
+    }
+
+    async function performSearch(query) {
+      if (query.length < 3) return [];
+      await loadPostsIndex();
+      return POSTS.filter((post) =>
+        (post.title || '').toLowerCase().includes(query) ||
+        (post.excerpt || '').toLowerCase().includes(query) ||
+        (post.content || '').toLowerCase().includes(query)
+      );
+    }
+
+    function getVisiblePages(current, total) {
+      const pages = new Set();
+      const range = 3;
+      for (let i = 1; i <= Math.min(3, total); i += 1) pages.add(i);
+      for (let i = Math.max(1, total - 2); i <= total; i += 1) pages.add(i);
+      for (let i = Math.max(1, current - range); i <= Math.min(total, current + range); i += 1) pages.add(i);
+      return Array.from(pages).sort((a, b) => a - b);
+    }
+
+    function renderResultsHeader(query, totalResults) {
+      const safeQuery = escapeHtml(query);
+      return `
+        <div class="search-results-header">
+          <nav class="breadcrumbs search-results-breadcrumbs" aria-label="Breadcrumb">
+            <ol>
+              <li><a href="/">Acasă</a></li>
+              <li class="is-current"><span aria-current="page">Căutare</span></li>
+            </ol>
+          </nav>
+          <div class="search-success-message">
+            <span class="context-pill">Căutare globală</span>
+            <h1>Rezultate pentru “${safeQuery}”</h1>
+            <p>S-au găsit <strong>${totalResults}</strong> rezultat${totalResults !== 1 ? 'e' : ''}. Rafinarea începe din bara de căutare fixă.</p>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderNoResults(query) {
+      return `
+        <div class="empty-state-card">
+          <span class="context-pill">Fără rezultate</span>
+          <h2>Nu am găsit articole pentru “${escapeHtml(query)}”</h2>
+          <p>Încearcă un cuvânt mai general sau folosește numele unei categorii vizibile în bara laterală.</p>
+        </div>
+      `;
+    }
+
+    async function triggerSearch(rawQuery, { scrollToResults = false } = {}) {
+      const trimmedQuery = rawQuery.trim();
+      syncSearchInputs(trimmedQuery);
+
+      if (trimmedQuery.length < 3) {
+        currentSearchQuery = '';
+        clearSearchResults();
+        return;
       }
 
-      function closePanel(){
-        panel.classList.remove('open');
-        btn.setAttribute('aria-expanded','false');
-        try { if (trapHandler) panel.removeEventListener('keydown', trapHandler); } catch (err) { /* ignore */ }
-        const onEnd = (e)=>{
-          if (e.target !== panel && !panel.contains(e.target)) return;
-          panel.setAttribute('hidden','');
-          if (closeTransitionHandler) { panel.removeEventListener('transitionend', closeTransitionHandler); }
-          closeTransitionHandler = null;
-          document.body.style.overflow = '';
-          try { previouslyFocused && previouslyFocused.focus && previouslyFocused.focus(); } catch (err) { /* ignore */ }
-        };
-        const clearFallback = ()=>{ if (closeTimeoutId) { clearTimeout(closeTimeoutId); closeTimeoutId = null; } };
-        closeTransitionHandler = (e) => { onEnd(e); clearFallback(); };
-        panel.addEventListener('transitionend', closeTransitionHandler);
-        closeTimeoutId = setTimeout(()=>{ try { onEnd({ target: panel }); } catch (_){}; clearFallback(); }, 350);
+      currentSearchQuery = trimmedQuery;
+      const results = await performSearch(trimmedQuery.toLowerCase());
+      displaySearchResults(results, 1, trimmedQuery);
+
+      if (scrollToResults) {
+        setTimeout(() => {
+          const resultsEl = document.getElementById('global-search-results');
+          if (resultsEl && resultsEl.style.display !== 'none') {
+            resultsEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        }, 100);
       }
+    }
 
-      btn.addEventListener('click', function(){
-        if (panel.hasAttribute('hidden')) openPanel(); else closePanel();
-      });
-      closeBtn && closeBtn.addEventListener('click', closePanel);
-      panel.addEventListener('keydown', function(e){ if (e.key === 'Escape') closePanel(); });
-      panel.addEventListener('click', function(e){ if (e.target === panel) closePanel(); });
-    } catch (err) { console.error(err); }
-  })();
-</script>
-
-<script type="module">
-  // Global search across all pages
-  let POSTS = null;
-
-  async function loadPostsIndex(){
-    if (POSTS) return POSTS;
-    try {
-      const res = await fetch('/search-index.json');
-      if (res.ok) { POSTS = await res.json(); return POSTS; }
-    } catch(e) {}
-    POSTS = window.FALLBACK_POSTS || [];
-    return POSTS;
-  }
-
-  // Desktop search
-  const desktopInput = document.getElementById('global-search-input');
-  const desktopButton = document.getElementById('global-search-button');
-
-  // Mobile search
-  const mobileInput = document.getElementById('global-search-input-mobile');
-  const mobileButton = document.getElementById('global-search-button-mobile');
-
-  async function performSearch(query){
-    if (query.length < 3) return null;
-    await loadPostsIndex();
-    return POSTS.filter(p =>
-      (p.title||'').toLowerCase().includes(query) ||
-      (p.excerpt||'').toLowerCase().includes(query) ||
-      (p.content||'').toLowerCase().includes(query)
-    );
-  }
-
-   // Desktop search
-   if (desktopButton && desktopInput) {
-     desktopButton.addEventListener('click', async () => {
-       const q = desktopInput.value.trim().toLowerCase();
-       if (q.length < 3) return;
-       const results = await performSearch(q);
-       displaySearchResults(results, 1);
-     });
-     desktopInput.addEventListener('keydown', (e) => {
-       if (e.key === 'Enter') desktopButton.click();
-     });
-   }
-
-   // Handle mobile search
-   if (mobileButton && mobileInput) {
-     mobileButton.addEventListener('click', async () => {
-       const q = mobileInput.value.trim().toLowerCase();
-       if (q.length < 3) return;
-       const results = await performSearch(q);
-       displaySearchResults(results, 1);
-       // Scroll to results on mobile
-       setTimeout(() => {
-         const resultsEl = document.getElementById('global-search-results');
-         if (resultsEl && resultsEl.style.display !== 'none') {
-           resultsEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
-         }
-       }, 100);
-     });
-     mobileInput.addEventListener('keydown', (e) => {
-       if (e.key === 'Enter') mobileButton.click();
-     });
-   }
-
-    // Display search results with pagination
-    function displaySearchResults(allResults, page = 1) {
+    function displaySearchResults(allResults, page = 1, query = currentSearchQuery) {
       const resultsEl = document.getElementById('global-search-results');
       const mainContent = document.getElementById('main-content');
       if (!resultsEl || !mainContent) return;
 
       const PER_PAGE = 10;
-      const totalPages = Math.ceil(allResults.length / PER_PAGE);
+      const totalPages = Math.max(1, Math.ceil(allResults.length / PER_PAGE));
       const start = (page - 1) * PER_PAGE;
       const pageItems = allResults.slice(start, start + PER_PAGE);
 
-      resultsEl.innerHTML = '';
+      resultsEl.innerHTML = renderResultsHeader(query, allResults.length);
       mainContent.style.display = 'none';
 
-      // Success message
-      const message = document.createElement('div');
-      message.className = 'search-success-message';
-      message.innerHTML = `<p>S-au găsit <strong>${allResults.length}</strong> rezultat${allResults.length !== 1 ? 'e' : ''}:</p>`;
-      resultsEl.appendChild(message);
-
       if (pageItems.length === 0) {
-        resultsEl.innerHTML = '<p style="padding: 20px; text-align: center; color: #746d76;">Nu s-au găsit rezultate.</p>';
+        resultsEl.insertAdjacentHTML('beforeend', renderNoResults(query));
         resultsEl.style.display = 'block';
+        document.body.classList.add('search-results-visible');
         return;
       }
 
-      // Results list
       const list = document.createElement('div');
       list.className = 'post-list';
-      for (const p of pageItems) {
+      for (const post of pageItems) {
         const article = document.createElement('article');
         article.className = 'post-card';
-        article.innerHTML = `<p class="post-meta"><time datetime="${p.date}">${p.date||''}</time></p><h2><a href="/${p.slug}/">${p.title}</a></h2>${p.excerpt?`<p class="post-excerpt">${p.excerpt}</p>`:''}`;
+        article.innerHTML = `
+          <p class="post-meta"><time datetime="${escapeHtml(post.date || '')}">${escapeHtml(post.date || '')}</time></p>
+          <h2><a href="/${escapeHtml(post.slug)}/">${escapeHtml(post.title || '')}</a></h2>
+          ${post.excerpt ? `<p class="post-excerpt">${escapeHtml(post.excerpt)}</p>` : ''}
+        `;
         list.appendChild(article);
       }
       resultsEl.appendChild(list);
 
-      // Pagination
       if (totalPages > 1) {
         const pager = document.createElement('nav');
         pager.className = 'pagination';
         pager.setAttribute('aria-label', 'Paginare rezultate');
 
-        // Navigation wrapper (for mobile stacking)
         const navWrapper = document.createElement('div');
         navWrapper.className = 'pagination-nav-wrapper';
-
-        // Helper function to get smart page range
-        function getVisiblePages(current, total) {
-          const pages = new Set();
-          const range = 3;
-          // First 3
-          for (let i = 1; i <= Math.min(3, total); i++) pages.add(i);
-          // Last 3
-          for (let i = Math.max(1, total - 2); i <= total; i++) pages.add(i);
-          // Around current
-          for (let i = Math.max(1, current - range); i <= Math.min(total, current + range); i++) pages.add(i);
-          return Array.from(pages).sort((a, b) => a - b);
-        }
-
         const visiblePages = getVisiblePages(page, totalPages);
 
-        // Previous button
         if (page > 1) {
           const prev = document.createElement('a');
           prev.href = '#';
           prev.textContent = '← Anterior';
-          prev.addEventListener('click', (e) => {
-            e.preventDefault();
-            displaySearchResults(allResults, page - 1);
+          prev.addEventListener('click', (event) => {
+            event.preventDefault();
+            displaySearchResults(allResults, page - 1, query);
             resultsEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
           });
           navWrapper.appendChild(prev);
@@ -343,20 +529,18 @@ import { posts } from '../data/posts.js';
           navWrapper.appendChild(span);
         }
 
-        // Page info
         const info = document.createElement('span');
         info.className = 'pagination-info';
         info.textContent = `Pagina ${page} din ${totalPages}`;
         navWrapper.appendChild(info);
 
-        // Next button
         if (page < totalPages) {
           const next = document.createElement('a');
           next.href = '#';
           next.textContent = 'Următor →';
-          next.addEventListener('click', (e) => {
-            e.preventDefault();
-            displaySearchResults(allResults, page + 1);
+          next.addEventListener('click', (event) => {
+            event.preventDefault();
+            displaySearchResults(allResults, page + 1, query);
             resultsEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
           });
           navWrapper.appendChild(next);
@@ -369,21 +553,17 @@ import { posts } from '../data/posts.js';
 
         pager.appendChild(navWrapper);
 
-        // Page numbers with ellipsis
         const pages = document.createElement('div');
         pages.className = 'pagination-pages';
-        
         visiblePages.forEach((pageNum, index) => {
           const prevPage = index > 0 ? visiblePages[index - 1] : 0;
-          const showEllipsis = pageNum - prevPage > 1;
-          
-          if (showEllipsis) {
+          if (pageNum - prevPage > 1) {
             const ellipsis = document.createElement('span');
             ellipsis.className = 'pagination-ellipsis';
             ellipsis.textContent = '…';
             pages.appendChild(ellipsis);
           }
-          
+
           if (pageNum === page) {
             const span = document.createElement('span');
             span.className = 'pagination-current';
@@ -394,49 +574,57 @@ import { posts } from '../data/posts.js';
             const link = document.createElement('a');
             link.href = '#';
             link.textContent = String(pageNum);
-            link.addEventListener('click', (e) => {
-              e.preventDefault();
-              displaySearchResults(allResults, pageNum);
+            link.addEventListener('click', (event) => {
+              event.preventDefault();
+              displaySearchResults(allResults, pageNum, query);
               resultsEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
             });
             pages.appendChild(link);
           }
         });
         pager.appendChild(pages);
-
-
         resultsEl.appendChild(pager);
       }
 
       resultsEl.style.display = 'block';
+      document.body.classList.add('search-results-visible');
     }
 
-    // Clear search results and show main content
     function clearSearchResults() {
       const resultsEl = document.getElementById('global-search-results');
       const mainContent = document.getElementById('main-content');
       if (resultsEl && mainContent) {
         resultsEl.style.display = 'none';
+        resultsEl.innerHTML = '';
         mainContent.style.display = 'block';
+        document.body.classList.remove('search-results-visible');
       }
     }
 
-    // Clear results when user clears the search input
-    if (desktopInput) {
-      desktopInput.addEventListener('input', (e) => {
-        if (e.target.value.trim().length === 0) {
-          clearSearchResults();
-        }
+    if (desktopButton && desktopInput) {
+      desktopButton.addEventListener('click', () => triggerSearch(desktopInput.value));
+      desktopInput.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter') desktopButton.click();
+      });
+      desktopInput.addEventListener('input', (event) => {
+        const nextValue = event.target.value;
+        syncSearchInputs(nextValue);
+        if (nextValue.trim().length === 0) clearSearchResults();
       });
     }
-    if (mobileInput) {
-      mobileInput.addEventListener('input', (e) => {
-        if (e.target.value.trim().length === 0) {
-          clearSearchResults();
-        }
-      });
-    }
-</script>
 
+    if (mobileButton && mobileInput) {
+      mobileButton.addEventListener('click', () => triggerSearch(mobileInput.value, { scrollToResults: true }));
+      mobileInput.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter') mobileButton.click();
+      });
+      mobileInput.addEventListener('input', (event) => {
+        const nextValue = event.target.value;
+        syncSearchInputs(nextValue);
+        if (nextValue.trim().length === 0) clearSearchResults();
+      });
+    }
+  </script>
 </body>
 </html>
+

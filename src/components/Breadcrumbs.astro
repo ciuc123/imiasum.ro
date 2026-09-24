@@ -1,0 +1,24 @@
+---
+const { items = [] } = Astro.props;
+const breadcrumbItems = (items || []).filter((item) => item?.label);
+---
+
+{breadcrumbItems.length > 0 && (
+  <nav class="breadcrumbs" aria-label="Breadcrumb">
+    <ol>
+      {breadcrumbItems.map((item, index) => {
+        const isCurrent = index === breadcrumbItems.length - 1;
+        return (
+          <li class={isCurrent ? 'is-current' : undefined}>
+            {item.href && !isCurrent ? (
+              <a href={item.href}>{item.label}</a>
+            ) : (
+              <span aria-current={isCurrent ? 'page' : undefined}>{item.label}</span>
+            )}
+          </li>
+        );
+      })}
+    </ol>
+  </nav>
+)}
+

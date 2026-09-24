@@ -17,7 +17,24 @@ const { page } = Astro.props;
 const pageData = getPage(posts, page);
 ---
 
-<Layout title={`Toate postarile – pagina ${pageData.currentPage}`} canonical={pageUrl('/blog/', pageData.currentPage)}>
+<Layout
+  title={`Toate postările – pagina ${pageData.currentPage}`}
+  description={`Arhiva completă de articole, pagina ${pageData.currentPage} din ${pageData.totalPages}.`}
+  canonical={pageUrl('/blog/', pageData.currentPage)}
+  breadcrumbs={[{ label: 'Toate postările', href: '/blog/' }, { label: `Pagina ${pageData.currentPage}` }]}
+  navSection="blog"
+>
+  <header class="page-hero">
+    <div class="page-hero-copy">
+      <p class="eyebrow">Arhivă</p>
+      <h1>Toate postările</h1>
+      <p>Ești în pagina {pageData.currentPage} din {pageData.totalPages}, cu aceeași căutare și aceeași navigare coerentă în tot blogul.</p>
+    </div>
+    <div class="page-hero-meta">
+      <span class="context-pill">{posts.length} articole</span>
+      <span class="context-pill">Pagina {pageData.currentPage} din {pageData.totalPages}</span>
+    </div>
+  </header>
   <div id="blog-list">
     <PostList posts={pageData.items} showExcerpt />
     <Pagination basePath="/blog/" {...pageData} />

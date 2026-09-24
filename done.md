@@ -1,7 +1,22 @@
 # imiasum.ro — Migration Checklist (Archive)
 
 Archived: 2026-09-19
-Last updated: 2026-09-22 (continued work)
+Last updated: 2026-09-24 (continued work)
+
+## Recent Work Session (2026-09-24)
+
+Implemented the cohesive UX modernization pass requested for the blog and confirmed the production build completed successfully.
+
+**UX redesign completed:**
+- Added reusable breadcrumbs across blog, category, post, search, and 404 states
+- Added `theme-blue` and `theme-purple` classes with a persistent theme switcher
+- Redesigned header, sidebar, mobile navigation, pagination, and post cards into one consistent system
+- Added active-state indicators for the current blog/category context in desktop and mobile navigation
+- Improved page intros and context visibility on blog listings, category archives, and post pages
+- Refined global search results so they feel like part of the same browsing experience
+
+**Build status:**
+- `npm run build` completed successfully after the layout fix
 
 ## Recent Work Session (2026-09-22)
 
