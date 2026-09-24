@@ -7,7 +7,7 @@ Updated: 2026-09-24
 ## 🎨 High Priority: Modernize Blog UX
 
 The current blog feels too minimal. Features (Search, pagination, and overall layout) are fine and should ideally remain the same. 
-Look & feel / colours need modernization.
+Look & feel (think professionl high ticket coaching, iphone 18pro max blue) / colours need modernization.
 
 ### Current Issues:
 - Search results feel disconnected from browsing — no context about current page
