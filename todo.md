@@ -6,14 +6,10 @@ Updated: 2026-09-24
 
 ## 🎨 High Priority: Modernize Blog UX
 
-The current blog feels inconsistent and confusing. Search visibility, pagination behavior, and overall layout need modernization.
+The current blog feels too minimal. Features (Search, pagination, and overall layout) are fine. Look & feel / colours need modernization.
 
 ### Current Issues:
-- Search box only appears on `/blog/` and paginated blog pages, not visible on category pages or single posts
-- Pagination shows on blog index but disappears on search results or category listings  
 - Search results feel disconnected from browsing — no context about current page
-- Mobile layout feels cramped with categories + limited space
-- Blog structure lacks clear visual hierarchy and consistent spacing
 - No visual feedback for current location (active category/page)
 
 ### Desired Behavior:
@@ -26,13 +22,7 @@ A modern, consistent blog UX where:
 6. **Blog feels like a unified space** — not disconnected pages, but a cohesive reading experience
 
 ### Implementation Scope:
-- Add search bar to category pages (`src/pages/category/[slug].astro`, `src/pages/category/[slug]/[page].astro`)
-- Make pagination consistently styled across all listings
-- Add context headers for category/search result pages
-- Refactor mobile layout for clarity
-- Update CSS for modern spacing and typography (consider using CSS Grid for better layout control)
 - Add visual indicators for current page/category
-- Consider sticky search header for mobile (vs hamburger overlay)
 
 **Status**: Not started — needs design review before implementation
 
@@ -61,15 +51,10 @@ See `docs/admin-system.md` for:
 **Next step**: Review options and choose an approach, then implement auth + post creation UI
 
 ---
+## ✨ SEO & GEO
 
-## 📋 Medium Priority (Testing & Validation)
-
-- [ ] **Test several old posts** for media URLs and rendering edge cases
-- [ ] **Verify images/media on production** (CDN / Pages asset paths)
-
-## ✨ Features & Polish (Optional)
-
-- [ ] **Improve search ranking** (title/excerpt weight, term highlighting)
+- [ ] propose SEO improvements for blog posts (meta tags, structured data, Open Graph)
+- [ ] propose GEO improvements for blog posts (geo meta tags, structured data for local SEO)
 
 ---
 
