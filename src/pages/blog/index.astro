@@ -8,7 +8,24 @@ import { getPage, pageUrl } from '../../lib/content.js';
 const pageData = getPage(posts, 1);
 ---
 
-<Layout title="Toate postarile" canonical={pageUrl('/blog/', pageData.currentPage)}>
+<Layout
+  title="Toate postările"
+  description="Arhiva completă de articole, cu căutare persistentă, context clar și navigare coerentă."
+  canonical={pageUrl('/blog/', pageData.currentPage)}
+  breadcrumbs={[{ label: 'Toate postările' }]}
+  navSection="blog"
+>
+  <header class="page-hero">
+    <div class="page-hero-copy">
+      <p class="eyebrow">Arhivă</p>
+      <h1>Toate postările</h1>
+      <p>Un spațiu unificat pentru explorare, căutare și lectură, cu accent pe claritate și ritm vizual.</p>
+    </div>
+    <div class="page-hero-meta">
+      <span class="context-pill">{posts.length} articole</span>
+      <span class="context-pill">Pagina {pageData.currentPage} din {pageData.totalPages}</span>
+    </div>
+  </header>
   <div id="blog-list">
     <PostList posts={pageData.items} showExcerpt />
     <Pagination basePath="/blog/" {...pageData} />

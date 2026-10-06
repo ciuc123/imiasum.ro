@@ -25,7 +25,21 @@ A modern, consistent blog UX where:
 ### Implementation Scope:
 - Add visual indicators for current page/category
 
-**Status**: Not started — needs design review before implementation
+### Implemented on 2026-09-24
+- [x] cohesive redesign across header, listing pages, post pages, sidebar, pagination, and search results
+- [x] simple breadcrumbs across blog, category, post, search, and 404 states
+- [x] `theme-blue` / `theme-purple` theme switching with persisted preference
+- [x] active-state indicators for blog/category navigation on desktop and mobile
+- [x] stronger visual hierarchy with card surfaces, spacing, context pills, and clearer page intros
+- [x] mobile navigation refreshed to match the redesigned desktop experience
+
+### Optional follow-up proposals
+- [ ] add reading progress bar on post pages
+- [ ] add “back to top” floating action on long posts and long search results
+- [ ] add keyboard shortcut (`/`) to focus global search
+- [ ] add category counts in sidebar/mobile menu
+
+**Status**: Core redesign complete — follow-up polish items optional
 
 ---
 

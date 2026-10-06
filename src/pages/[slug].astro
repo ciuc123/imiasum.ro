@@ -11,12 +11,29 @@ export function getStaticPaths() {
 }
 
 const { item } = Astro.props;
+const primaryCategory = item.categories?.[0] || null;
 ---
-<Layout title={item.title}>
-  <article>
-    <p class="eyebrow">Articol</p>
-    <h1>{item.title}</h1>
-    {item.date && <p class="post-meta"><time datetime={item.date}>{item.date}</time></p>}
+<Layout
+  title={item.title}
+  description={item.excerpt || item.title}
+  breadcrumbs={[
+    { label: 'Toate postările', href: '/blog/' },
+    ...(primaryCategory ? [{ label: primaryCategory.name, href: `/category/${primaryCategory.slug}/` }] : []),
+    { label: item.title }
+  ]}
+  navSection="blog"
+  currentCategorySlug={primaryCategory?.slug || ''}
+>
+  <article class="post-detail">
+    <header class="post-hero">
+      <p class="eyebrow">Articol</p>
+      <h1>{item.title}</h1>
+      {item.excerpt && <p class="post-detail-excerpt">{item.excerpt}</p>}
+      <div class="post-hero-meta">
+        {item.date && <p class="post-meta"><time datetime={item.date}>{item.date}</time></p>}
+        {primaryCategory && <span class="context-pill">Categoria activă: {primaryCategory.name}</span>}
+      </div>
+    </header>
     {item.categories?.length > 0 && <div class="post-categories post-categories-detail" aria-label="Categorii">
       {item.categories.map((category) => <a href={`/category/${category.slug}/`}>{category.name}</a>)}
     </div>}

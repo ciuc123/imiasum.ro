@@ -6,6 +6,29 @@ import { posts } from '../data/posts.js';
 const latest = posts.slice(0, 8);
 ---
 
-<Layout title="Educație Relațională">
-  <PostList posts={latest} showExcerpt />
+<Layout
+  title="Educație Relațională"
+  description="Articole despre educație relațională, organizate într-o experiență de lectură mai clară și mai modernă."
+>
+  <section class="hero-card">
+    <div>
+      <p class="eyebrow">Spațiu editorial</p>
+      <h1>Educație relațională, într-un format mai clar și mai calm.</h1>
+      <p class="hero-intro">Am păstrat căutarea, paginarea și structura blogului, dar am adus mai mult context, ritm și consistență în felul în care navighezi prin articole.</p>
+    </div>
+    <div class="hero-actions">
+      <a class="button-link" href="/blog/">Vezi toate postările</a>
+    </div>
+  </section>
+
+  <section class="section-shell">
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow">Noutăți</p>
+        <h2>Ultimele articole</h2>
+      </div>
+      <a href="/blog/">Explorează arhiva completă</a>
+    </div>
+    <PostList posts={latest} showExcerpt />
+  </section>
 </Layout>

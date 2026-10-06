@@ -1,4 +1,15 @@
 ---
 import Layout from '../layouts/Layout.astro';
 ---
-<Layout title="Pagina nu a fost găsită"><h1>Pagina nu a fost găsită</h1><p><a href="/">Înapoi la pagina principală</a></p></Layout>
+
+<Layout title="Pagina nu a fost găsită" breadcrumbs={[{ label: 'Pagina nu a fost găsită' }]}>
+  <section class="not-found-card">
+	<p class="eyebrow">404</p>
+	<h1>Pagina nu a fost găsită</h1>
+	<p>Linkul poate fi vechi sau incomplet. Poți reveni la pagina principală sau poți intra direct în arhiva completă de articole.</p>
+	<div class="hero-actions">
+	  <a class="button-link" href="/">Înapoi la pagina principală</a>
+	  <a href="/blog/">Deschide toate postările</a>
+	</div>
+  </section>
+</Layout>

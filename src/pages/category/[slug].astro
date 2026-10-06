@@ -11,14 +11,27 @@ export function getStaticPaths() {
 }
 
 const { category } = Astro.props;
-const pageData = getPage(getCategoryPosts(posts, category.slug), 1);
+const categoryPosts = getCategoryPosts(posts, category.slug);
+const pageData = getPage(categoryPosts, 1);
 ---
 
-<Layout title={`Categoria: ${category.name}`}>
-  <header class="page-heading">
-    <p class="eyebrow">Categorie</p>
-    <h1>{category.name}</h1>
-    <p>Articole din categoria {category.name}.</p>
+<Layout
+  title={`Categoria: ${category.name}`}
+  description={`Articole din categoria ${category.name}, într-o listare clară și ușor de parcurs.`}
+  breadcrumbs={[{ label: 'Toate postările', href: '/blog/' }, { label: category.name }]}
+  navSection="blog"
+  currentCategorySlug={category.slug}
+>
+  <header class="page-hero">
+    <div class="page-hero-copy">
+      <p class="eyebrow">Categorie activă</p>
+      <h1>{category.name}</h1>
+      <p>Vezi doar articolele din această temă, cu aceleași controale de căutare și aceeași paginare ca în restul blogului.</p>
+    </div>
+    <div class="page-hero-meta">
+      <span class="context-pill">{categoryPosts.length} articole</span>
+      <span class="context-pill">Pagina {pageData.currentPage} din {pageData.totalPages}</span>
+    </div>
   </header>
   <PostList posts={pageData.items} showExcerpt />
   <Pagination basePath={`/category/${category.slug}/`} {...pageData} />
