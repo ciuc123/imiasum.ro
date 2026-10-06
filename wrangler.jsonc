@@ -10,6 +10,7 @@
       "custom_domain": true
     }
   ],
+  "previews": {},
   "env": {
     "dev": {
       "name": "imiasum-ro-dev",
